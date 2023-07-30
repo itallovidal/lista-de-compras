@@ -7,12 +7,12 @@ export const styles = React.StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'flex-start',
-        padding: 25,
+        padding: 20,
         gap: 10,
         position: 'relative',
-        height: 120
+        height: 120,
     },
-    input:{
+    taskName:{
         color: 'white',
         padding: 15,
         width: '80%',
@@ -20,6 +20,7 @@ export const styles = React.StyleSheet.create({
         borderRadius: 5,
         height: 50,
     },
+
     errorMsg:{
         color: 'tomato',
         position: "absolute",
@@ -31,7 +32,9 @@ export const styles = React.StyleSheet.create({
         padding: 15,
         borderRadius: 5,
         height: 50,
-        justifyContent: "center"
+        flexGrow: 1,
+        justifyContent: "center",
+        alignItems: "center"
     },
     text:{
         color: 'white',

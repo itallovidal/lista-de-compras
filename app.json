@@ -21,10 +21,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/app/adaptativeicon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.ividalll.listaCompras"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "01fe8d07-4006-4744-821a-0df6c3a9461d"
+      }
     }
   }
 }

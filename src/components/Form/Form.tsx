@@ -24,7 +24,8 @@ function Form({setTaskList}: FormProps) {
                 return [...prevTasks, {
                     id: prevTasks.length + 1,
                     completed: false,
-                    task: task
+                    task: task,
+                    price: 0
                 }]
             })
             setTask('')
@@ -33,15 +34,15 @@ function Form({setTaskList}: FormProps) {
         }
     }
 
-    function handleChange(text: string){
-        setTask(text)
-    }
 
     return (
         <View style={styles.form}>
-            <TextInput value={task} onChangeText={handleChange} style={styles.input}/>
+            <TextInput
+                value={task}
+                onChangeText={(text)=> setTask(text)}
+                style={styles.taskName}/>
 
-            {error && <Text style={styles.errorMsg}> Ops, a tarefa precisa de mais de 3 caracteres!</Text>}
+            {error && <Text style={styles.errorMsg}> Ops, preencha corretamente!</Text>}
 
             <TouchableOpacity onPress={submitTask} style={styles.button} >
                 <Icon size={15}   color={'white'} name={'plus'}/>

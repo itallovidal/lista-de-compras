@@ -8,35 +8,32 @@ import Form from "./src/components/Form/Form";
 import TaskHeader from "./src/components/taskHeader/TaskHeader";
 import Task from "./src/components/Task/Task";
 import colors from "./src/colors";
-import {color} from "react-native-elements/dist/helpers";
+import Footer from "./src/components/Footer/Footer";
 
 export default function App() {
   const [taskList, setTaskList] = React.useState<Array<TaskInterface>>([])
 
 
   return (
-    <View>
-      <StatusBar translucent  backgroundColor={colors.primaryColorDark}  />
-      <Header/>
-      <View style={styles.main}>
-        <Form setTaskList={setTaskList}/>
-        <TaskHeader tasks={taskList}/>
+    <View style={{height: '100%'}}>
+        <StatusBar
+            style={'light'}
+            backgroundColor={colors.primaryColorDark}/>
 
-        <FlatList
-            data={taskList}
-            keyExtractor={(task)=> String(task.id)}
-            renderItem={({item})=>(
-                <Task key={item.id} setTaskList={setTaskList} data={item}/>
-            )}
-        >
+        <Header/>
+        <View style={styles.main}>
+            <Form setTaskList={setTaskList}/>
+            <TaskHeader tasks={taskList}/>
 
-        </FlatList>
-      </View>
+            <FlatList
+                data={taskList}
+                keyExtractor={(task)=> String(task.id)}
+                renderItem={({item})=>(
+                    <Task key={item.id} setTaskList={setTaskList} data={item}/>
+                )}>
+            </FlatList>
+        </View>
+        <Footer tasks={taskList}/>
     </View>
   );
 }
-
-// { taskList.length > 0
-//     ? taskList.map(task => <Task key={task.id} setTaskList={setTaskList} data={task}/>).reverse()
-//     : <EmptyTaskMessage/>
-// }

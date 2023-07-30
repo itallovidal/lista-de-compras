@@ -3,8 +3,8 @@ import colors from "../../colors";
 
 export const styles = React.StyleSheet.create({
     wrapper:{
-        marginTop: 30,
-        height: 150,
+        paddingTop: '10%',
+        height: '20%',
         flexDirection: 'row',
         backgroundColor: colors.neutralColor7,
         justifyContent: 'center',
@@ -13,7 +13,6 @@ export const styles = React.StyleSheet.create({
 
     logo:{
         width: 250,
-        // height: 80,
         objectFit: "contain"
     }
 })

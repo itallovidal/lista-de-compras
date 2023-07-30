@@ -4,7 +4,7 @@ import colors from "./src/colors";
 export const styles = React.StyleSheet.create({
     main:{
         backgroundColor: colors.neutralColor6,
-        height: '100%',
+        flexBasis: '70%',
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -13,7 +13,8 @@ export const styles = React.StyleSheet.create({
         fontSize: 24
     },
 
-    // taskList:{
-    //     backgroundColor: 'green'
-    // }
+    taskList:{
+        backgroundColor: 'green',
+        height: 20
+    }
 })
