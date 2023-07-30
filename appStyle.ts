@@ -4,7 +4,8 @@ import colors from "./src/colors";
 export const styles = React.StyleSheet.create({
     main:{
         backgroundColor: colors.neutralColor6,
-        flexBasis: '70%',
+        height: '70%',
+        maxHeight: '70%',
         justifyContent: 'center',
         alignItems: 'center',
     },

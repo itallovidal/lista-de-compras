@@ -3,8 +3,7 @@ import colors from "../../colors";
 
  const styles = StyleSheet.create({
     wrapper:{
-        backgroundColor: colors.neutralColor4,
-        padding: 20,
+        backgroundColor: 'black',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: "center",
@@ -13,7 +12,7 @@ import colors from "../../colors";
      span:{
         fontSize: 16,
         marginLeft: 15,
-         color: 'white'
+         color: colors.primaryColorLight
      },
      total:{
         marginRight: 20,

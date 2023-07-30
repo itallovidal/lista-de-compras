@@ -1,6 +1,8 @@
 import {
+    Keyboard,
+    NativeSyntheticEvent,
     Text,
-    TextInput,
+    TextInput, TextInputKeyPressEventData,
     TouchableOpacity,
     View
 } from "react-native";
@@ -18,15 +20,15 @@ function Form({setTaskList}: FormProps) {
     const [error, setError] = React.useState<boolean>(false)
 
     function submitTask(){
-        if(task.length > 3){
+        if(task.length >= 3){
             setError(false)
             setTaskList((prevTasks)=> {
-                return [...prevTasks, {
+                return [{
                     id: prevTasks.length + 1,
                     completed: false,
                     task: task,
                     price: 0
-                }]
+                }, ...prevTasks ]
             })
             setTask('')
         }else{
@@ -40,6 +42,10 @@ function Form({setTaskList}: FormProps) {
             <TextInput
                 value={task}
                 onChangeText={(text)=> setTask(text)}
+                onSubmitEditing={()=> {
+                    Keyboard.dismiss
+                    submitTask()
+                }}
                 style={styles.taskName}/>
 
             {error && <Text style={styles.errorMsg}> Ops, preencha corretamente!</Text>}
