@@ -1,5 +1,5 @@
 import {
-    Keyboard,
+    Keyboard, KeyboardAvoidingView,
     NativeSyntheticEvent,
     Text,
     TextInput, TextInputKeyPressEventData,
@@ -31,14 +31,16 @@ function Form({setTaskList}: FormProps) {
                 }, ...prevTasks ]
             })
             setTask('')
-        }else{
+        }else if(task.length > 0){
             setError(true)
+        }else{
+            setError(false)
         }
     }
 
 
     return (
-        <View style={styles.form}>
+        <KeyboardAvoidingView behavior={'padding'} style={styles.form}>
             <TextInput
                 value={task}
                 onChangeText={(text)=> setTask(text)}
@@ -53,7 +55,7 @@ function Form({setTaskList}: FormProps) {
             <TouchableOpacity onPress={submitTask} style={styles.button} >
                 <Icon size={15}   color={'white'} name={'plus'}/>
             </TouchableOpacity>
-        </View>
+        </KeyboardAvoidingView>
     );
 }
 

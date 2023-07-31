@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, TextInput, TouchableOpacity, View} from "react-native";
+import {FlatList, KeyboardAvoidingView, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {TaskInterface} from "../../interfaces/interfaces";
 import {styles} from "./TasksStyle";
 import Icon from "react-native-vector-icons/FontAwesome5";
@@ -7,9 +7,10 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 interface TaskProps{
     data: TaskInterface,
     setTaskList: React.Dispatch<React.SetStateAction<TaskInterface[]>>
+    flatList:  React.RefObject<FlatList<TaskInterface>>
 }
 
-function Task({data, setTaskList} : TaskProps) {
+function Task({data, setTaskList, flatList} : TaskProps) {
     const [isChecked, setIsChecked] = React.useState<boolean>(false)
 
     const wrapperStyle: Array<{}> = [styles.wrapper]
@@ -71,6 +72,7 @@ function Task({data, setTaskList} : TaskProps) {
                 editable={!isChecked}
                 keyboardType={'decimal-pad'}
                 // value={`${data.price}`}
+                onFocus={()=> flatList.current?.scrollToItem({animated: true, item: data})}
                 onChangeText={addPrice}
                 style={styles.taskPrice}/>
 

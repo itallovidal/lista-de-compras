@@ -12,7 +12,7 @@ function Footer({tasks} : FooterProps) {
     return (
         <View style={styles.wrapper}>
             <Text style={styles.span}>Valor Total:</Text>
-            <Text style={styles.total}>R${total}</Text>
+            <Text style={styles.total}>R${total.toFixed(2)}</Text>
         </View>
     );
 }

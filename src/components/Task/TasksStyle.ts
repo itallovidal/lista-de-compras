@@ -29,6 +29,10 @@ export const styles = React.StyleSheet.create({
         alignItems: "center"
     },
 
+
+
+
+
     checkbox:{
         width: '20%',
         justifyContent: "center",
