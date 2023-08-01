@@ -1,6 +1,7 @@
-export interface TaskInterface {
-    id: number,
+export interface cartItem {
+    id: string,
     completed: boolean,
-    task: string,
-    price: number
+    itemName: string,
+    price: number,
+    quantity: number
 }

@@ -1,31 +1,34 @@
 import {AddButton, ErrorSpan, FormWrapper} from "./Form.styled";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import {TaskInterface} from "../../../../interfaces/interfaces";
+import {cartItem} from "../../../../interfaces/interfaces";
 import {Keyboard} from "react-native";
 import React from 'react';
 import {Input} from "../../../../StyledComponents/global.styled";
+import uuid from 'react-native-uuid';
+
 
 interface FormProps {
-    setTaskList: React.Dispatch<React.SetStateAction<TaskInterface[]>>,
+    setTaskList: React.Dispatch<React.SetStateAction<cartItem[]>>,
 }
 
 function Form({setTaskList}: FormProps) {
-    const [task, setTask] = React.useState<string>('')
+    const [product, setProduct] = React.useState<string>('')
     const [error, setError] = React.useState<boolean>(false)
 
     function submitTask(){
-        if(task.length >= 3){
+        if(product.length >= 3){
             setError(false)
             setTaskList((prevTasks)=> {
                 return [{
-                    id: prevTasks.length + 1,
+                    id: `${uuid.v4()}`,
                     completed: false,
-                    task: task,
-                    price: 0
+                    itemName: product,
+                    price: 0,
+                    quantity: 1
                 }, ...prevTasks ]
             })
-            setTask('')
-        }else if(task.length > 0){
+            setProduct('')
+        }else if(product.length > 0){
             setError(true)
         }else{
             setError(false)
@@ -36,9 +39,9 @@ function Form({setTaskList}: FormProps) {
         <FormWrapper>
             <Input
                 width={'80%'}
-                value={task}
+                value={product}
                 padding={'20px'}
-                onChangeText={(text)=> setTask(text)}
+                onChangeText={(text)=> setProduct(text)}
                 onSubmitEditing={()=> {
                     Keyboard.dismiss
                     submitTask()

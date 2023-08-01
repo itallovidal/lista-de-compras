@@ -1,5 +1,5 @@
 import {Span} from "../../../../StyledComponents/global.styled";
-import {TaskInterface} from "../../../../interfaces/interfaces";
+import {cartItem} from "../../../../interfaces/interfaces";
 import styled from "styled-components/native";
 import React from 'react';
 
@@ -17,15 +17,16 @@ const FooterWrapper = styled.View`
 `
 
 interface FooterProps{
-    tasks: Array<TaskInterface>
+    products: Array<cartItem>
 }
-function Footer({tasks} : FooterProps) {
-    const total = tasks.reduce((acc, task) => acc + task.price , 0).toFixed(2)
+function Footer({products} : FooterProps) {
+    console.log(products[0]?.quantity)
+    const totalPrice = products.reduce((acc, item) => {return acc + (item.price * item.quantity) }, 0).toFixed(2)
 
     return (
         <FooterWrapper>
             <Span>Valor Total:</Span>
-            <Span textColor={'white'}>R${total}</Span>
+            <Span textColor={'white'}>R${totalPrice}</Span>
         </FooterWrapper>
     );
 }

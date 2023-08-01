@@ -1,18 +1,20 @@
-import {DeleteButton, TaskWrapper, WrapperInputs} from "./Task.styled";
+import {DeleteButton, TaskWrapper, WrapperInputs} from "./Product.styled";
 import {Input, Span} from "../../../../StyledComponents/global.styled";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import {TaskInterface} from "../../../../interfaces/interfaces";
-import {FlatList, Text, View} from "react-native";
+import {cartItem} from "../../../../interfaces/interfaces";
+import {FlatList} from "react-native";
 import React from 'react';
 
 interface TaskProps{
-    data: TaskInterface,
-    setTaskList: React.Dispatch<React.SetStateAction<TaskInterface[]>>
-    flatList:  React.RefObject<FlatList<TaskInterface>>
+    data: cartItem,
+    setTaskList: React.Dispatch<React.SetStateAction<cartItem[]>>
+    flatList:  React.RefObject<FlatList<cartItem>>
 }
 
-function Task({data, setTaskList, flatList} : TaskProps) {
+function Product({data, setTaskList, flatList} : TaskProps) {
     const [isChecked, setIsChecked] = React.useState<boolean>(false)
+    const [price, setPrice] = React.useState<string>('')
+    const [quantity, setQuantity] = React.useState<string>('1')
 
     function deleteTask(){
         setTaskList((prevTasks)=> {
@@ -22,36 +24,67 @@ function Task({data, setTaskList, flatList} : TaskProps) {
         })
     }
 
-    function addPrice(text: string){
-        if(text.includes(',')){
-            text = text.replace(',', '.')
+    function changeQuantity(text: string){
+        if(text === '0'){
+            setQuantity('1')
+            return
         }
 
-        const price = text.length > 0 ? parseFloat(text) : 0
+        if(text.length < 1){
+            setQuantity(text)
+            return
+        }
+
+        const quantity = parseFloat(text)
 
         setTaskList((prevTasks)=> {
             return prevTasks.map((prevTask)=>{
                 if(prevTask.id === data.id) {
-                    prevTask.price = price
+                    prevTask.quantity = quantity
+                    setQuantity(text)
                 }
                 return prevTask
             })
         })
     }
 
+    function changePrice(text: string){
+        if(text.length < 1){
+            setPrice(text)
+            return
+        }
+
+        if(text.includes(',')){
+            text = text.replace(',', '.')
+        }
+        const price = text.length > 0 ? parseFloat(text) : 0
+
+        setTaskList((prevTasks)=> {
+            return prevTasks.map((prevTask)=>{
+                if(prevTask.id === data.id) {
+                        prevTask.price = price
+                        setPrice(text)
+                }
+                return prevTask
+            })
+        })
+    }
+
+
     return (
         <TaskWrapper >
-            <Span textColor={'white'}> {data.task} </Span>
+            <Span textColor={'white'}> {data.itemName} </Span>
 
             <WrapperInputs >
                 <Input
                     width={'35%'}
+                    value={price}
                     editable={!isChecked}
                     maxLength={5}
                     align={'center'}
                     keyboardType={'decimal-pad'}
-                    // onFocus={()=> flatList.current?.scrollToItem({animated: true, item: data})}
-                    // onChangeText={addPrice}
+                    onFocus={()=> flatList.current?.scrollToItem({animated: true, item: data})}
+                    onChangeText={changePrice}
                     placeholder={'R$'}
                     placeholderTextColor={'rgba(255,255,255,0.41)'}
                 />
@@ -61,13 +94,11 @@ function Task({data, setTaskList, flatList} : TaskProps) {
                     align={'center'}
                     editable={!isChecked}
                     keyboardType={'decimal-pad'}
-                    placeholder={'QTD'}
+                    value={quantity}
                     placeholderTextColor={'rgba(255,255,255,0.41)'}
-                    // onFocus={()=> flatList.current?.scrollToItem({animated: true, item: data})}
-                    // onChangeText={addPrice}
+                    onFocus={()=> flatList.current?.scrollToItem({animated: true, item: data})}
+                    onChangeText={changeQuantity}
                 />
-
-
 
                 <DeleteButton  onPress={deleteTask}>
                     <Icon size={20} color={'tomato'} name={'trash'}/>
@@ -77,4 +108,4 @@ function Task({data, setTaskList, flatList} : TaskProps) {
     );
 }
 
-export default Task;
+export default Product;

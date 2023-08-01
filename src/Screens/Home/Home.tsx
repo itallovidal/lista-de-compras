@@ -1,42 +1,39 @@
 import React, {useRef} from "react";
-import {TaskInterface} from "../../interfaces/interfaces";
-import {FlatList, KeyboardAvoidingView, StatusBar, TouchableOpacity, View} from "react-native";
+import {cartItem} from "../../interfaces/interfaces";
+import {FlatList, StatusBar, View} from "react-native";
 import {ThemeProvider} from "styled-components/native";
 import {darkTheme} from "../../StyledComponents/theme.styled";
 import Header from "./components/Header/Header";
-import {Main} from "./Home.styled";
+import {HomeWrapper, Main} from "./Home.styled";
 import Footer from "./components/Footer/Footer";
 import Form from "./components/Form/Form";
-import Task from "./components/Task/Task";
+import Product from "./components/Product/Product";
 
 function Home() {
-    const [taskList, setTaskList] = React.useState<Array<TaskInterface>>([])
-    const flatList = useRef<FlatList<TaskInterface>>(null)
+    const [cartProducts, setCartProducts] = React.useState<Array<cartItem>>([])
+    const flatList = useRef<FlatList<cartItem>>(null)
 
     return (
         <ThemeProvider  theme={darkTheme}>
-            <View style={{backgroundColor: darkTheme.neutralColor6, height: '100%'}}>
+            <HomeWrapper>
                 <StatusBar hidden/>
                 <Header/>
-                <Form setTaskList={setTaskList}/>
+                <Form setTaskList={setCartProducts}/>
                 <Main behavior={'height'}>
                     <FlatList
                         style={{ marginTop: 15, paddingHorizontal: 10, width: '100%'}}
                         ref={flatList}
-                        data={taskList}
-                        keyExtractor={(task) => String(task.id)}
+                        data={cartProducts}
+                        keyExtractor={(product) => String(product.id)}
                         renderItem={({item}) => (
-                            <Task key={item.id} flatList={flatList} setTaskList={setTaskList} data={item}/>
+                            <Product key={item.id} flatList={flatList} setTaskList={setCartProducts} data={item}/>
                         )}>
                     </FlatList>
-                    <Footer tasks={taskList}/>
+                    <Footer products={cartProducts}/>
                 </Main>
-            </View>
+            </HomeWrapper>
         </ThemeProvider>
     );
 }
 
 export default Home;
-
-// header => 20%
-// form => 8%
