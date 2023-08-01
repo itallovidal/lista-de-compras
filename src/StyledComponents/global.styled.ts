@@ -5,7 +5,7 @@ interface SpanProps{
 }
 
 export const Span = styled.Text<SpanProps>`
-  font-size: 16px;
+  font-size: 18px;
   color: ${({theme, textColor})=> textColor ? textColor : theme.primaryColorLight};
 `
 
