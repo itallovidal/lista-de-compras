@@ -1,4 +1,4 @@
-const colors = {
+export const darkTheme ={
     neutralColor1: `#F2F2F2`,
     neutralColor2: `#D9D9D9`,
     neutralColor3: `#808080`,
@@ -11,5 +11,3 @@ const colors = {
     secondarycolorLight: `#8284FA`,
     secondarycolorDark: `#5E60CE`,
 }
-
-export default colors

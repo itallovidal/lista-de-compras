@@ -1,15 +1,9 @@
-import {
-    Keyboard, KeyboardAvoidingView,
-    NativeSyntheticEvent,
-    Text,
-    TextInput, TextInputKeyPressEventData,
-    TouchableOpacity,
-    View
-} from "react-native";
-import {TaskInterface} from "../../interfaces/interfaces";
-import React from 'react';
-import {styles} from "./formStyle";
+import {AddButton, ErrorSpan, FormWrapper} from "./Form.styled";
 import Icon from "react-native-vector-icons/FontAwesome5";
+import {TaskInterface} from "../../../../interfaces/interfaces";
+import {Keyboard} from "react-native";
+import React from 'react';
+import {Input} from "../../../../StyledComponents/global.styled";
 
 interface FormProps {
     setTaskList: React.Dispatch<React.SetStateAction<TaskInterface[]>>,
@@ -38,24 +32,26 @@ function Form({setTaskList}: FormProps) {
         }
     }
 
-
     return (
-        <KeyboardAvoidingView behavior={'padding'} style={styles.form}>
-            <TextInput
+        <FormWrapper>
+            <Input
+                width={'80%'}
                 value={task}
+                padding={'20px'}
                 onChangeText={(text)=> setTask(text)}
                 onSubmitEditing={()=> {
                     Keyboard.dismiss
                     submitTask()
                 }}
-                style={styles.taskName}/>
+            />
 
-            {error && <Text style={styles.errorMsg}> Ops, preencha corretamente!</Text>}
 
-            <TouchableOpacity onPress={submitTask} style={styles.button} >
-                <Icon size={15}   color={'white'} name={'plus'}/>
-            </TouchableOpacity>
-        </KeyboardAvoidingView>
+            <AddButton onPress={submitTask} >
+                <Icon size={15} color={'white'} name={'plus'}/>
+            </AddButton>
+
+            {error && <ErrorSpan> Ops, preencha corretamente!</ErrorSpan>}
+        </FormWrapper>
     );
 }
 
