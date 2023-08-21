@@ -1,37 +1,50 @@
 import React, {useRef} from "react";
 import {cartItem} from "../../interfaces/interfaces";
-import {FlatList, StatusBar, View} from "react-native";
+import {FlatList, StatusBar, } from "react-native";
 import {ThemeProvider} from "styled-components/native";
 import {darkTheme} from "../../StyledComponents/theme.styled";
 import Header from "./components/Header/Header";
-import {HomeWrapper, Main} from "./Home.styled";
-import Footer from "./components/Footer/Footer";
 import Form from "./components/Form/Form";
 import Product from "./components/Product/Product";
+import {Keyboard} from 'react-native'
+import * as Style from './Home.styled'
+import {KeyboardAwareFlatList} from "react-native-keyboard-aware-scroll-view";
+import FlatListHeader from "./components/FlatListHeader/FlatListHeader";
 
 function Home() {
     const [cartProducts, setCartProducts] = React.useState<Array<cartItem>>([])
-    const flatList = useRef<FlatList<cartItem>>(null)
+    const myList = React.useRef<FlatList>(null)
+    const [isShow, setIsShow] = React.useState(false)
+
+    Keyboard.addListener('keyboardDidHide',(e)=>{
+        setIsShow(false)
+    })
+
+    Keyboard.addListener('keyboardDidShow',()=>{
+        setIsShow(true)
+    })
 
     return (
         <ThemeProvider  theme={darkTheme}>
-            <HomeWrapper>
+            <Style.HomeWrapper>
                 <StatusBar hidden/>
                 <Header/>
                 <Form setTaskList={setCartProducts}/>
-                <Main behavior={'height'}>
-                    <FlatList
-                        style={{ marginTop: 15, paddingHorizontal: 10, width: '100%'}}
-                        ref={flatList}
+
+                <Style.Main>
+                    <FlatListHeader products={cartProducts}/>
+                    <KeyboardAwareFlatList
+                        extraScrollHeight={190}
+                        enableOnAndroid={true}
+                        keyboardShouldPersistTaps={'always'}
                         data={cartProducts}
-                        keyExtractor={(product) => String(product.id)}
-                        renderItem={({item}) => (
-                            <Product key={item.id} flatList={flatList} setTaskList={setCartProducts} data={item}/>
+                        keyExtractor={(product) =>  String(product.id)}
+                        renderItem={({item}: {item: cartItem}) => (
+                            <Product key={item.id} setTaskList={setCartProducts} data={item}/>
                         )}>
-                    </FlatList>
-                    <Footer products={cartProducts}/>
-                </Main>
-            </HomeWrapper>
+                    </KeyboardAwareFlatList>
+                </Style.Main>
+            </Style.HomeWrapper>
         </ThemeProvider>
     );
 }

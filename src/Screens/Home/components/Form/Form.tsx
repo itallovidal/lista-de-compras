@@ -1,10 +1,10 @@
-import {AddButton, ErrorSpan, FormWrapper} from "./Form.styled";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import {cartItem} from "../../../../interfaces/interfaces";
 import {Keyboard} from "react-native";
 import React from 'react';
-import {Input} from "../../../../StyledComponents/global.styled";
 import uuid from 'react-native-uuid';
+
+import * as Style from './Form.styled'
 
 
 interface FormProps {
@@ -35,12 +35,11 @@ function Form({setTaskList}: FormProps) {
         }
     }
 
+
     return (
-        <FormWrapper>
-            <Input
-                width={'80%'}
+        <Style.FormWrapper>
+            <Style.Input
                 value={product}
-                padding={'20px'}
                 onChangeText={(text)=> setProduct(text)}
                 onSubmitEditing={()=> {
                     Keyboard.dismiss
@@ -49,12 +48,12 @@ function Form({setTaskList}: FormProps) {
             />
 
 
-            <AddButton onPress={submitTask} >
+            <Style.AddButton onPress={submitTask} >
                 <Icon size={15} color={'white'} name={'plus'}/>
-            </AddButton>
+            </Style.AddButton>
 
-            {error && <ErrorSpan> Ops, preencha corretamente!</ErrorSpan>}
-        </FormWrapper>
+            {error && <Style.ErrorSpan> Ops, preencha corretamente!</Style.ErrorSpan>}
+        </Style.FormWrapper>
     );
 }
 

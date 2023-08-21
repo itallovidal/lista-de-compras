@@ -8,10 +8,9 @@ import React from 'react';
 interface TaskProps{
     data: cartItem,
     setTaskList: React.Dispatch<React.SetStateAction<cartItem[]>>
-    flatList:  React.RefObject<FlatList<cartItem>>
 }
 
-function Product({data, setTaskList, flatList} : TaskProps) {
+function Product({data, setTaskList} : TaskProps) {
     const [isChecked, setIsChecked] = React.useState<boolean>(false)
     const [price, setPrice] = React.useState<string>('')
     const [quantity, setQuantity] = React.useState<string>('1')
@@ -83,7 +82,6 @@ function Product({data, setTaskList, flatList} : TaskProps) {
                     maxLength={5}
                     align={'center'}
                     keyboardType={'decimal-pad'}
-                    onFocus={()=> flatList.current?.scrollToItem({animated: true, item: data})}
                     onChangeText={changePrice}
                     placeholder={'R$'}
                     placeholderTextColor={'rgba(255,255,255,0.41)'}
@@ -96,7 +94,6 @@ function Product({data, setTaskList, flatList} : TaskProps) {
                     keyboardType={'decimal-pad'}
                     value={quantity}
                     placeholderTextColor={'rgba(255,255,255,0.41)'}
-                    onFocus={()=> flatList.current?.scrollToItem({animated: true, item: data})}
                     onChangeText={changeQuantity}
                 />
 

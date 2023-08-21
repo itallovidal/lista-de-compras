@@ -1,4 +1,5 @@
 import styled from "styled-components/native";
+import {InputBase} from "../../../../StyledComponents/global.styled";
 
 export const ErrorSpan = styled.Text`
   color: tomato;
@@ -12,8 +13,12 @@ export const AddButton = styled.TouchableOpacity`
   flex-grow: 1;
   justify-content: center;
   align-items: center;
-  height: 100%;
   border-radius: 5px;
+  height: 100%;
+`
+export const Input = styled(InputBase)`
+    width: 80%;
+    padding-left: 15px;
 `
 
 export const FormWrapper = styled.View`
@@ -23,9 +28,10 @@ export const FormWrapper = styled.View`
   gap: 10px;
   flex-wrap: wrap;
   position: relative;
-  top: -8%;
-  margin: 0 10px 0 10px;
+  //top: -25px;
+  background-color: black;
+  padding: 0 10px 0 10px;
   z-index: 10;
-  height: 8%;
+  height: 50px;
 `
 

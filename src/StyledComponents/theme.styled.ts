@@ -10,4 +10,4 @@ export const darkTheme ={
     primaryColorDark: `#1E6F9F`,
     secondarycolorLight: `#8284FA`,
     secondarycolorDark: `#5E60CE`,
-}
+} as const
