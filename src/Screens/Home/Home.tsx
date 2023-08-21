@@ -34,7 +34,7 @@ function Home() {
                 <Style.Main>
                     <FlatListHeader products={cartProducts}/>
                     <KeyboardAwareFlatList
-                        extraScrollHeight={190}
+                        extraScrollHeight={155}
                         enableOnAndroid={true}
                         keyboardShouldPersistTaps={'always'}
                         data={cartProducts}

@@ -19,6 +19,8 @@ export const AddButton = styled.TouchableOpacity`
 export const Input = styled(InputBase)`
     width: 80%;
     padding-left: 15px;
+    border-width: 2px;
+    border-style: solid;
 `
 
 export const FormWrapper = styled.View`

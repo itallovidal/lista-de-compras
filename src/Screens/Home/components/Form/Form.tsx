@@ -39,6 +39,7 @@ function Form({setTaskList}: FormProps) {
     return (
         <Style.FormWrapper>
             <Style.Input
+                style={{borderColor: error ? 'red' : 'black'}}
                 value={product}
                 onChangeText={(text)=> setProduct(text)}
                 onSubmitEditing={()=> {
@@ -52,7 +53,7 @@ function Form({setTaskList}: FormProps) {
                 <Icon size={15} color={'white'} name={'plus'}/>
             </Style.AddButton>
 
-            {error && <Style.ErrorSpan> Ops, preencha corretamente!</Style.ErrorSpan>}
+            {/*{error && <Style.ErrorSpan> Ops, preencha corretamente!</Style.ErrorSpan>}*/}
         </Style.FormWrapper>
     );
 }
