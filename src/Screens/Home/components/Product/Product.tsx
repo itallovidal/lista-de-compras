@@ -1,29 +1,25 @@
 import {DeleteButton, TaskWrapper, WrapperInputs} from "./Product.styled";
 import {Input, Span} from "../../../../StyledComponents/global.styled";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import {cartItem} from "../../../../interfaces/interfaces";
+import {CartItem} from "../../../../interfaces/interfaces";
 import {FlatList} from "react-native";
-import React from 'react';
+import React, {useContext} from 'react';
+import {useTheme} from "styled-components/native";
+import {GlobalContext} from "../../../../context/GlobalContextProvider";
 
 interface TaskProps{
-    data: cartItem,
-    setTaskList: React.Dispatch<React.SetStateAction<cartItem[]>>
+    data: CartItem,
 }
 
-function Product({data, setTaskList} : TaskProps) {
+function Product({data} : TaskProps) {
     const [isChecked, setIsChecked] = React.useState<boolean>(false)
     const [price, setPrice] = React.useState<string>('')
     const [quantity, setQuantity] = React.useState<string>('1')
+    const {deleteTask, changeQuantity, changePrice} = useContext(GlobalContext)
 
-    function deleteTask(){
-        setTaskList((prevTasks)=> {
-            return prevTasks.filter((prevTask)=>{
-                return prevTask.id !== data.id
-            })
-        })
-    }
+    const theme = useTheme()
 
-    function changeQuantity(text: string){
+    function handleChangeQuantity(text: string){
         if(text === '0'){
             setQuantity('1')
             return
@@ -35,19 +31,11 @@ function Product({data, setTaskList} : TaskProps) {
         }
 
         const quantity = parseFloat(text)
-
-        setTaskList((prevTasks)=> {
-            return prevTasks.map((prevTask)=>{
-                if(prevTask.id === data.id) {
-                    prevTask.quantity = quantity
-                    setQuantity(text)
-                }
-                return prevTask
-            })
-        })
+        changeQuantity(quantity, data)
+        setQuantity(text)
     }
 
-    function changePrice(text: string){
+    function handleChangePrice(text: string){
         if(text.length < 1){
             setPrice(text)
             return
@@ -56,22 +44,14 @@ function Product({data, setTaskList} : TaskProps) {
         if(text.includes(',')){
             text = text.replace(',', '.')
         }
-        const price = text.length > 0 ? parseFloat(text) : 0
 
-        setTaskList((prevTasks)=> {
-            return prevTasks.map((prevTask)=>{
-                if(prevTask.id === data.id) {
-                        prevTask.price = price
-                        setPrice(text)
-                }
-                return prevTask
-            })
-        })
+        const price = text.length > 0 ? parseFloat(text) : 0
+        changePrice(price, data)
+        setPrice(text)
     }
 
-
     return (
-        <TaskWrapper >
+        <TaskWrapper start={{ x: 0.7, y: 0 }} colors={[...theme['gradiente']]} >
             <Span textColor={'white'}> {data.itemName} </Span>
 
             <WrapperInputs >
@@ -82,7 +62,7 @@ function Product({data, setTaskList} : TaskProps) {
                     maxLength={5}
                     align={'center'}
                     keyboardType={'decimal-pad'}
-                    onChangeText={changePrice}
+                    onChangeText={handleChangePrice}
                     placeholder={'R$'}
                     placeholderTextColor={'rgba(255,255,255,0.41)'}
                 />
@@ -94,10 +74,10 @@ function Product({data, setTaskList} : TaskProps) {
                     keyboardType={'decimal-pad'}
                     value={quantity}
                     placeholderTextColor={'rgba(255,255,255,0.41)'}
-                    onChangeText={changeQuantity}
+                    onChangeText={handleChangeQuantity}
                 />
 
-                <DeleteButton  onPress={deleteTask}>
+                <DeleteButton onPress={()=> deleteTask(data)}>
                     <Icon size={20} color={'tomato'} name={'trash'}/>
                 </DeleteButton>
             </WrapperInputs>

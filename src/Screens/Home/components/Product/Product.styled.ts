@@ -1,7 +1,7 @@
 import styled from "styled-components/native";
+import {LinearGradient} from "expo-linear-gradient";
 
-export const TaskWrapper = styled.View`
-  background-color: ${({theme})=>theme.neutralColor4};
+export const TaskWrapper = styled(LinearGradient)`
   border-radius: 5px;
   padding: 15px;
   justify-content: space-between;
@@ -22,4 +22,5 @@ export const WrapperInputs = styled.View`
   width: 50%;
   justify-content: space-between;
   align-items: center;
+  //background-color: ${({theme})=>theme['gray-500']};
 `

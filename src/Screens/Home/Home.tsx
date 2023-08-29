@@ -1,39 +1,26 @@
 import React from "react";
-import {cartItem} from "../../interfaces/interfaces";
-import { StatusBar, } from "react-native";
-import {ThemeProvider} from "styled-components/native";
+
 import {darkTheme} from "../../StyledComponents/theme.styled";
-import Header from "./components/Header/Header";
-import Form from "./components/Form/Form";
-import Product from "./components/Product/Product";
 import * as Style from './Home.styled'
-import {KeyboardAwareFlatList} from "react-native-keyboard-aware-scroll-view";
-import FlatListHeader from "./components/FlatListHeader/FlatListHeader";
 
+import Header from "./components/Header/Header";
+import FinishButton from "./components/FinishButton/FinishButton";
+import ItemList from "./ItemList/ItemList";
+
+import {ThemeProvider} from "styled-components/native";
+import GlobalContextProvider from "../../context/GlobalContextProvider";
 function Home() {
-    const [cartProducts, setCartProducts] = React.useState<Array<cartItem>>([])
-
     return (
-        <ThemeProvider  theme={darkTheme}>
-            <Style.HomeWrapper>
-                <StatusBar hidden/>
-                <Header/>
-                <Form setTaskList={setCartProducts}/>
-
-                <Style.Main>
-                    <FlatListHeader products={cartProducts}/>
-                    <KeyboardAwareFlatList
-                        extraScrollHeight={155}
-                        enableOnAndroid={true}
-                        keyboardShouldPersistTaps={'always'}
-                        data={cartProducts}
-                        keyExtractor={(product) =>  String(product.id)}
-                        renderItem={({item}: {item: cartItem}) => (
-                            <Product key={item.id} setTaskList={setCartProducts} data={item}/>
-                        )}>
-                    </KeyboardAwareFlatList>
-                </Style.Main>
-            </Style.HomeWrapper>
+        <ThemeProvider theme={darkTheme}>
+            <GlobalContextProvider>
+                <Style.HomeWrapper>
+                    <Header/>
+                    <Style.Main>
+                        <ItemList/>
+                        <FinishButton/>
+                    </Style.Main>
+                </Style.HomeWrapper>
+            </GlobalContextProvider>
         </ThemeProvider>
     );
 }

@@ -1,13 +1,11 @@
 import {Span} from "../../../../StyledComponents/global.styled";
-import {cartItem} from "../../../../interfaces/interfaces";
+import {CartItem} from "../../../../interfaces/interfaces";
 import styled from "styled-components/native";
-import React from 'react';
+import React, {useContext} from 'react';
+import {GlobalContext} from "../../../../context/GlobalContextProvider";
 
 const Wrapper = styled.View`
-  background-color: black;
-  border-bottom-width: 5px;
-  border-color: black;
-  border-style: solid;
+  background-color: ${({theme})=>theme['gray-700']};
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
@@ -16,15 +14,14 @@ const Wrapper = styled.View`
   padding-right: 20px;
   width: 100%;
   margin-bottom: 16px;
-
 `
 
-interface FooterProps{
-    products: Array<cartItem>
-}
-function FlatListHeader({products} : FooterProps) {
-    console.log(products[0]?.quantity)
-    const totalPrice = products.reduce((acc, item) => {return acc + (item.price * item.quantity) }, 0).toFixed(2)
+
+function FlatListHeader() {
+    const {cartProducts} = useContext(GlobalContext)
+    const totalPrice = cartProducts.reduce((acc, item) => {
+        return acc + (item.price * item.quantity)
+    }, 0).toFixed(2)
 
     return (
         <Wrapper>

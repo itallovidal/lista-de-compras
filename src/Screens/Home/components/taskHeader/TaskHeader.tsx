@@ -1,11 +1,11 @@
 import React from 'react';
 import {styles} from './taskHeaderStyle'
 import {Text, View} from "react-native";
-import {cartItem} from "../../../../interfaces/interfaces";
+import {CartItem} from "../../../../interfaces/interfaces";
 import {Header} from "./TaskHeader.styled";
 
 interface TasksHeaderProps{
-    tasks: Array<cartItem>
+    tasks: Array<CartItem>
 }
 
 function TaskHeader({tasks} : TasksHeaderProps) {

@@ -1,32 +1,28 @@
 import Icon from "react-native-vector-icons/FontAwesome5";
-import {cartItem} from "../../../../interfaces/interfaces";
 import {Keyboard} from "react-native";
-import React from 'react';
+import React, {useContext} from 'react';
 import uuid from 'react-native-uuid';
 
+import * as gStyle from '../../../../StyledComponents/global.styled'
 import * as Style from './Form.styled'
 
 
-interface FormProps {
-    setTaskList: React.Dispatch<React.SetStateAction<cartItem[]>>,
-}
+import {useTheme} from "styled-components/native";
+import {GlobalContext} from "../../../../context/GlobalContextProvider";
 
-function Form({setTaskList}: FormProps) {
+
+
+
+function Form() {
     const [product, setProduct] = React.useState<string>('')
     const [error, setError] = React.useState<boolean>(false)
+    const theme = useTheme()
+    const {setNewProduct} = useContext(GlobalContext)
 
     function submitTask(){
         if(product.length >= 3){
             setError(false)
-            setTaskList((prevTasks)=> {
-                return [{
-                    id: `${uuid.v4()}`,
-                    completed: false,
-                    itemName: product,
-                    price: 0,
-                    quantity: 1
-                }, ...prevTasks ]
-            })
+            setNewProduct(product)
             setProduct('')
         }else if(product.length > 0){
             setError(true)
@@ -39,8 +35,10 @@ function Form({setTaskList}: FormProps) {
     return (
         <Style.FormWrapper>
             <Style.Input
-                style={{borderColor: error ? 'red' : 'black'}}
+                style={{borderColor: error ? 'red' : theme['gray-700']}}
                 value={product}
+                placeholder={'Digite o item:'}
+                placeholderTextColor={'grey'}
                 onChangeText={(text)=> setProduct(text)}
                 onSubmitEditing={()=> {
                     Keyboard.dismiss
@@ -49,11 +47,10 @@ function Form({setTaskList}: FormProps) {
             />
 
 
-            <Style.AddButton onPress={submitTask} >
+            <gStyle.Button onPress={submitTask} >
                 <Icon size={15} color={'white'} name={'plus'}/>
-            </Style.AddButton>
+            </gStyle.Button>
 
-            {/*{error && <Style.ErrorSpan> Ops, preencha corretamente!</Style.ErrorSpan>}*/}
         </Style.FormWrapper>
     );
 }

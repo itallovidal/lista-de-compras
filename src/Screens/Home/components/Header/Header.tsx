@@ -1,10 +1,13 @@
-import styled from "styled-components/native";
-import {Image} from "react-native";
+import styled, {useTheme} from "styled-components/native";
+import {LinearGradient} from "expo-linear-gradient";
+import Form from "../Form/Form";
+import FlatListHeader from "../FlatListHeader/FlatListHeader";
+import React from "react";
+import {StatusBar} from "react-native";
 
-const Wrapper = styled.View`
+const Wrapper = styled(LinearGradient)`
   height: 140px;
   padding-top: 20px;
-  background-color: ${({theme})=> theme.neutralColor7};
   justify-content: center;
   align-items: center;
 `
@@ -15,10 +18,17 @@ const Img = styled.Image`
 `
 
 function Header() {
+    const theme = useTheme()
     return (
-        <Wrapper>
-            <Img source={require('../../../../assets/logo.png')}/>
-        </Wrapper>
+        <>
+            <StatusBar hidden/>
+            <Wrapper colors={[...theme['gradiente']]}>
+                <Img source={require('../../../../assets/logo.png')}/>
+            </Wrapper>
+            <Form/>
+            <FlatListHeader/>
+        </>
+
     );
 }
 
