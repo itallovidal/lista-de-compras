@@ -4,6 +4,7 @@ import * as gStyles from '../../StyledComponents/global.styled'
 import {LinearGradient} from "expo-linear-gradient";
 import {View} from "react-native";
 import {useNavigation} from "@react-navigation/native";
+import {GlobalContext} from "../../context/GlobalContextProvider";
 
 const Wrapper = styled.View`
   flex: 1;
@@ -32,7 +33,16 @@ const ButtonWrapper = styled.View`
 function PendingList() {
     const theme = useTheme()
     const navigation = useNavigation()
+    const {finishList} = React.useContext(GlobalContext)
 
+
+    function handleDismiss(value: boolean){
+        if(value){
+            finishList()
+        }
+
+        navigation.navigate('home')
+    }
     return (
         <Wrapper>
             <Popup colors={[...theme['gradiente']]}>
@@ -43,8 +53,8 @@ function PendingList() {
                 <gStyles.Span style={{marginBottom: 15}} textColor={'white'}>Deseja continuar com ela?</gStyles.Span>
 
                 <ButtonWrapper>
-                    <gStyles.Button onPress={()=> navigation.navigate('home') }><gStyles.Span textColor={'white'}>Finalizar</gStyles.Span></gStyles.Button>
-                    <gStyles.Button variant={true}><gStyles.Span textColor={'black'}>Continuar</gStyles.Span></gStyles.Button>
+                    <gStyles.Button onPress={ ()=> handleDismiss(true) }><gStyles.Span textColor={'white'}>Finalizar</gStyles.Span></gStyles.Button>
+                    <gStyles.Button onPress={ ()=> handleDismiss(false) } variant={true}><gStyles.Span textColor={'black'}>Continuar</gStyles.Span></gStyles.Button>
                 </ButtonWrapper>
             </Popup>
         </Wrapper>

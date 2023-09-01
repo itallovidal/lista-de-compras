@@ -13,8 +13,19 @@ interface TaskProps{
 
 function Product({data} : TaskProps) {
     const [isChecked, setIsChecked] = React.useState<boolean>(false)
-    const [price, setPrice] = React.useState<string>('')
-    const [quantity, setQuantity] = React.useState<string>('1')
+    const [price, setPrice] = React.useState<string>(()=>{
+        if(data.price !== 0){
+            return data.price.toString()
+        }
+
+        return ''
+    })
+    const [quantity, setQuantity] = React.useState<string>(()=>{
+        if(data){
+            return data.quantity.toString()
+        }
+        return '1'
+    })
     const {deleteTask, changeQuantity, changePrice} = useContext(GlobalContext)
 
     const theme = useTheme()

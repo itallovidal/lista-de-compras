@@ -7,11 +7,11 @@ import GlobalContextProvider from "./src/context/GlobalContextProvider";
 export default function App() {
     return (
         <ThemeProvider theme={darkTheme}>
-            <GlobalContextProvider>
-                <NavigationContainer>
+            <NavigationContainer>
+                <GlobalContextProvider>
                     <AppRoutes/>
-                </NavigationContainer>
-            </GlobalContextProvider>
+                </GlobalContextProvider>
+            </NavigationContainer>
         </ThemeProvider>
     )
 }

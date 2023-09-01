@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 
 import * as Style from './Home.styled'
 
@@ -8,6 +8,7 @@ import ItemList from "./ItemList/ItemList";
 
 
 function Home() {
+
     return (
             <Style.HomeWrapper>
                 <Header/>

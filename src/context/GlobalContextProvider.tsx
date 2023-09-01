@@ -2,6 +2,7 @@ import React, {ReactNode, useEffect} from 'react';
 import {CartItem} from "../interfaces/interfaces";
 import uuid from "react-native-uuid";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {useNavigation} from "@react-navigation/native";
 
 
 
@@ -14,7 +15,8 @@ interface ContextProps{
     changePrice: (a: number, b: CartItem)=> void,
     changeQuantity: (a: number, b: CartItem)=> void,
     deleteTask: (a: CartItem)=> void,
-    finishList: ()=> void
+    finishList: ()=> void,
+    setNewList: (a: string[]) => void
 }
 
 interface ProviderProps{
@@ -38,13 +40,16 @@ async function storeDataList(data: CartItem[]): Promise<void>{
 export const GlobalContext = React.createContext({} as ContextProps)
 function GlobalContextProvider({children}: ProviderProps) {
     const [cartProducts, setCartProducts] = React.useState<Array<CartItem>>([])
+    const navigation = useNavigation()
+
+
 
     useEffect(() => {
         console.log('getting stored data...')
         getStoredList().then(data =>{
             if(data){
-                console.log('found!')
                 setCartProducts(data)
+                navigation.navigate('popup')
             }
         })
     }, []);
@@ -66,6 +71,20 @@ function GlobalContextProvider({children}: ProviderProps) {
                 quantity: 1
             }, ...prevProducts ]
         })
+    }
+
+    function setNewList(list: string[]){
+        const newList: CartItem[] = list.map((item)=>{
+            return {
+                id: `${uuid.v4()}`,
+                completed: false,
+                itemName: item,
+                price: 0,
+                quantity: 0
+            }
+        })
+
+        setCartProducts(newList)
     }
 
     function deleteTask(data: CartItem){
@@ -105,7 +124,7 @@ function GlobalContextProvider({children}: ProviderProps) {
     }
 
     return (
-        <GlobalContext.Provider value={{cartProducts, setNewProduct, changePrice, changeQuantity, deleteTask, finishList }}>
+        <GlobalContext.Provider value={{cartProducts, setNewProduct, changePrice, changeQuantity, deleteTask, finishList, setNewList }}>
             {children}
         </GlobalContext.Provider>
     );
