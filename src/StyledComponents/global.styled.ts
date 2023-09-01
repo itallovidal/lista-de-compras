@@ -27,13 +27,17 @@ export const Input = styled(InputBase)<InputProps>`
   text-align: ${({align})=>align ? align : 'left'};
   padding-left: ${({padding})=>padding ? padding : '0'};
 `
-export const Button = styled.TouchableOpacity`
-  background-color: ${({theme})=>theme['primary']};
+
+interface ButtonProps{
+    variant?: boolean
+}
+export const Button = styled.TouchableOpacity<ButtonProps>`
+  background-color: ${({theme, variant})=> variant ? 'white' : theme['primary']};
   flex-grow: 1;
   justify-content: center;
   align-items: center;
   border-radius: 5px;
-  padding: 15px;
+  padding: 10px;
   max-height: 50px;
 `
 
