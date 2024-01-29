@@ -1,20 +1,26 @@
 import {IProduct} from "../../../@types/interfaces";
 import React from 'react';
 import {GlobalContext} from "../../../context/GlobalContextProvider";
-
-import {HStack, Text, Icon, Input, Button} from "native-base";
+import Animated, { FadeIn, FadeOut, Layout } from 'react-native-reanimated';
+import {Text, Icon, Input, Button, HStack} from "native-base";
 
 import {Trash} from "phosphor-react-native";
 
 interface TaskProps{
     product: IProduct,
+    index: number
 }
 
-function Product({product} : TaskProps) {
-    const {deleteProduct, changePrice, changeQuantity} = React.useContext(GlobalContext)
+const AnimatedHStack = Animated.createAnimatedComponent(HStack)
 
+function Product({product, index} : TaskProps) {
+    const {deleteProduct, changePrice, changeQuantity} = React.useContext(GlobalContext)
+    console.log("a")
     return (
-        <HStack alignItems={"center"}
+        <AnimatedHStack entering={FadeIn.delay(index * 100)}
+                        exiting={FadeOut}
+                        layout={Layout}
+                alignItems={"center"}
                 rounded={"md"}
                 m={3}
                 bg={"gray.400"}
@@ -64,7 +70,7 @@ function Product({product} : TaskProps) {
 
                 <Icon w={50} color={"red.600"} as={<Trash color={"red"}/>}/>
             </Button>
-        </HStack>
+        </AnimatedHStack>
     );
 }
 

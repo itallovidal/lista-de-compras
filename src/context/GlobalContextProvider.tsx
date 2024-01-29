@@ -8,6 +8,7 @@ export const GlobalContext = React.createContext({} as ContextProps)
 function GlobalContextProvider({children}: ProviderProps) {
     const [products, setProducts] = React.useState<IProduct[]>([])
 
+    console.log("context")
     React.useEffect(() => {
         console.log('getting stored data...')
         getStoredList().then(data =>{

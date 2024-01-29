@@ -16,6 +16,7 @@ import {useForm, Controller} from "react-hook-form";
 
 import z from 'zod'
 import {zodResolver} from "@hookform/resolvers/zod";
+import * as crypto from "expo-crypto";
 
 const formData = z.object({
     product: z.string().min(2, {message: "erro"})
@@ -29,22 +30,35 @@ function Home() {
             resolver: zodResolver(formData)
         }
     )
+
+    console.log("ho")
     const { height } = useWindowDimensions();
-    const {setNewProduct, products} = useContext(GlobalContext)
+    const {products} = useContext(GlobalContext)
+    const [list, setList] = React.useState<IProduct[]>(products)
 
     React.useEffect(() => {
-        if(products.length > 0 && products.length % 10 === 0){
+        if(list.length > 0 && list.length % 10 === 0){
             console.log('setting the data...')
-            storeDataList(products).then(()=>console.log("itens guardados"))
+            storeDataList(list).then(()=>console.log("itens guardados"))
         }
-    }, [products]);
+    }, [list]);
 
     function handleForm(data: IFormData){
         reset()
-        setNewProduct(data.product)
+        setList((prevProducts)=> {
+            return [{
+                id: `${crypto.randomUUID()}`,
+                picked: false,
+                name: data.product,
+                price: "0",
+                quantity: "1"
+            }, ...prevProducts ]
+        })
+
+        // setNewProduct(data.product)
     }
 
-    const cartTotal = products[0] ? products.reduce((acc, product)=>{
+    const cartTotal = list[0] ? list.reduce((acc, product)=>{
         const qtd = Number(product.quantity) === 0 ? 1 : Number(product.quantity)
         return acc + (Number(product.price) * qtd)
     }, 0 ) : 0
@@ -98,10 +112,13 @@ function Home() {
                     extraScrollHeight={130}
                     enableOnAndroid={true}
                     keyboardShouldPersistTaps={'always'}
-                    data={products}
+                    data={list}
                     keyExtractor={(product) =>  String(product.id)}
-                    renderItem={({item}: {item: IProduct}) => (
-                        <Product key={item.id} product={item}/>
+                    renderItem={({item, index}: {item: IProduct, index: number}) => (
+                        <Product key={item.id}
+                                 product={item}
+                                 index={index}
+                        />
                     )}>
                 </KeyboardAwareFlatList>
             </VStack>
