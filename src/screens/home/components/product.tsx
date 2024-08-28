@@ -1,6 +1,7 @@
 import { View, Text, TextInput } from 'react-native'
 import { Button } from '../../../global-components/button'
 import { Trash2 } from 'lucide-react-native'
+import { IProduct } from '../../../@types/interfaces'
 
 interface IProductProps {
   product: IProduct

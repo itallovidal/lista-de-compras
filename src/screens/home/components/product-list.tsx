@@ -1,25 +1,12 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { KeyboardAwareFlatList } from 'react-native-keyboard-aware-scroll-view'
-import { Product } from './Product'
-
-const list = [
-  {
-    id: 1,
-    name: 'banana',
-    price: '10',
-    quantity: '2',
-    picked: true,
-  },
-  {
-    id: 2,
-    name: 'pera',
-    price: '4',
-    quantity: '1',
-    picked: true,
-  },
-]
+import { Product } from './product'
+import { IProduct } from '../../../@types/interfaces'
+import { GlobalContext } from '../../../contexts/global-context-provider'
 
 export function ProductList() {
+  const { list } = useContext(GlobalContext)
+
   return (
     <KeyboardAwareFlatList
       contentContainerStyle={{
