@@ -5,7 +5,7 @@ import { ProductList } from './components/product-list'
 
 export function Home() {
   return (
-    <View className={'flex-1 '}>
+    <View className={'flex-1 bg-gray-700'}>
       <FinishList />
       <AddItemToList />
       <ProductList />
