@@ -13,9 +13,7 @@ export function AddItemToList() {
         placeholder={'Mamão, pera, uva..'}
         className={'flex-1 rounded-md  p-4 bg-white'}
       />
-      <Button>
-        <Plus color={'white'} size={16} />
-      </Button>
+      <Button icon={<Plus color={'white'} size={16} />} />
     </View>
   )
 }

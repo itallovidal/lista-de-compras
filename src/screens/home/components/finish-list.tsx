@@ -9,7 +9,7 @@ export function FinishList() {
       className={'bg-transparent p-4 justify-between items-center flex-row'}
     >
       <Logo />
-      <Button>Finalizar lista</Button>
+      <Button className={'bg-gray-600'}>Finalizar lista</Button>
     </View>
   )
 }
