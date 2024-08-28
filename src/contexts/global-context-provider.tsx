@@ -1,21 +1,18 @@
-// import { ContextProps, IProduct, ProviderProps } from '../@types/interfaces'
 // import { getStoredList } from '../utilities/AsyncStorage'
-// import * as crypto from 'expo-crypto'
-// import AsyncStorage from '@react-native-async-storage/async-storage'
-
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { IProduct } from '../@types/interfaces'
-import { createContext, ReactNode, useState } from 'react'
+import { createContext, ReactNode, useEffect, useState } from 'react'
 import * as crypto from 'expo-crypto'
+import { storeProductList } from '../utils/store-product-list'
+import { getStoredList } from '../utils/get-stored-list'
 
 interface ContextProps {
   list: IProduct[]
   addProductToList: (a: string) => void
-  // deleteProduct: (a: string) => void
-  //
-  // changePrice: (a: string, b: string) => void
-  // changeQuantity: (a: string, b: string) => void
-  // finishList: () => void
-  // setNewList: (a: string[]) => void
+  removeProductFromList: (a: string) => void
+  changePrice: (a: string, b: string) => void
+  finishList: () => void
+  changeQuantity: (a: string, b: string) => void
 }
 
 export const GlobalContext = createContext({} as ContextProps)
@@ -23,14 +20,21 @@ export const GlobalContext = createContext({} as ContextProps)
 function GlobalContextProvider({ children }: { children: ReactNode }) {
   const [list, setList] = useState<IProduct[]>([])
 
-  // useEffect(() => {
-  //   console.log('getting stored data...')
-  //   getStoredList().then((data) => {
-  //     if (data) {
-  //       setList(data)
-  //     }
-  //   })
-  // }, [])
+  useEffect(() => {
+    getStoredList().then((data) => {
+      if (data) {
+        setList(data)
+      }
+    })
+  }, [])
+
+  useEffect(() => {
+    if (list.length > 0 && list.length % 3 === 0) {
+      storeProductList(list).then(() =>
+        console.log('lista salva no local storage.'),
+      )
+    }
+  }, [list.length])
 
   function addProductToList(newItem: string) {
     const product = {
@@ -49,65 +53,50 @@ function GlobalContextProvider({ children }: { children: ReactNode }) {
     })
   }
 
-  // function deleteProduct(id: string) {
-  //   setList((prevTasks) => {
-  //     return prevTasks.filter((prevTask) => {
-  //       return prevTask.id !== id
-  //     })
-  //   })
-  // }
-  //
-  // function changePrice(price: string, id: string) {
-  //   setList((prevTasks) => {
-  //     return prevTasks.map((prevTask) => {
-  //       if (prevTask.id === id) {
-  //         prevTask.price = price
-  //       }
-  //       return prevTask
-  //     })
-  //   })
-  // }
-  //
-  // function changeQuantity(quantity: string, id: string) {
-  //   setList((prevTasks) => {
-  //     return prevTasks.map((prevTask) => {
-  //       if (prevTask.id === id) {
-  //         prevTask.quantity = quantity
-  //       }
-  //       return prevTask
-  //     })
-  //   })
-  // }
+  function removeProductFromList(id: string) {
+    setList((previousList) =>
+      previousList.filter((product) => {
+        return product.id !== id
+      }),
+    )
+  }
 
-  // function setNewList(list: string[]) {
-  //   const newList: IProduct[] = list.map((item) => {
-  //     return {
-  //       id: `${crypto.randomUUID()}`,
-  //       picked: false,
-  //       name: item,
-  //       price: '0',
-  //       quantity: '1',
-  //     }
-  //   })
-  //
-  //   setList(newList)
-  // }
+  function changePrice(price: string, id: string) {
+    setList((prevTasks) => {
+      return prevTasks.map((prevTask) => {
+        if (prevTask.id === id) {
+          prevTask.price = price
+        }
+        return prevTask
+      })
+    })
+  }
 
-  // function finishList() {
-  //   setList([])
-  //   AsyncStorage.clear()
-  // }
+  function changeQuantity(quantity: string, id: string) {
+    setList((prevTasks) => {
+      return prevTasks.map((prevTask) => {
+        if (prevTask.id === id) {
+          prevTask.quantity = quantity
+        }
+        return prevTask
+      })
+    })
+  }
+
+  async function finishList() {
+    setList([])
+    await AsyncStorage.clear()
+  }
 
   return (
     <GlobalContext.Provider
       value={{
         list,
         addProductToList,
-        // deleteProduct,
-        // changePrice,
-        // changeQuantity,
-        // finishList,
-        // setNewList,
+        removeProductFromList,
+        finishList,
+        changePrice,
+        changeQuantity,
       }}
     >
       {children}
