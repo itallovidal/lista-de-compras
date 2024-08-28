@@ -1,11 +1,15 @@
 import React from 'react'
-import { Image, View } from 'react-native'
-import logo from '../../assets/logo.png'
+import { View } from 'react-native'
+import { Logo } from '../../../global-components/logo'
+import { Button } from '../../../global-components/button'
 
 export function FinishList() {
   return (
-    <View className={'flex-1 justify-center items-center flex-row'}>
-      <Image source={logo} alt={''} resizeMode={'contain'} h={50} w={200} />
+    <View
+      className={'bg-transparent p-4 justify-between items-center flex-row'}
+    >
+      <Logo />
+      <Button>Finalizar lista</Button>
     </View>
   )
 }
