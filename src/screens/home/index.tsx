@@ -1,9 +1,12 @@
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
+import { FinishList } from './components/finish-list'
+import { AddItemToList } from './components/addItemToList'
 
 export function Home() {
   return (
-    <View>
-      <Text className={'text-blue-400 '}>hello world</Text>
+    <View className={'flex-1 '}>
+      <FinishList />
+      <AddItemToList />
     </View>
   )
 }
