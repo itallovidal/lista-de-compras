@@ -16,6 +16,7 @@ export function AppRoutes() {
         tabBarShowLabel: false,
         tabBarActiveTintColor: colors.blue['600'],
         tabBarInactiveTintColor: colors.gray['200'],
+        tabBarHideOnKeyboard: true,
 
         tabBarStyle: {
           backgroundColor: '#202024',

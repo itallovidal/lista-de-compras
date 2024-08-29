@@ -1,9 +1,10 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useRef } from 'react'
 import { KeyboardAwareFlatList } from 'react-native-keyboard-aware-scroll-view'
 import { Product } from './product'
 import { IImportProduct, IProduct } from '../../../@types/interfaces'
 import { GlobalContext } from '../../../contexts/global-context-provider'
 import { ListEmpty } from './list-empty'
+import { FlatList } from 'react-native'
 
 interface IProductListProps {
   listToImport: IImportProduct[] | undefined
@@ -11,6 +12,7 @@ interface IProductListProps {
 
 export function ProductList({ listToImport }: IProductListProps) {
   const { list, importList } = useContext(GlobalContext)
+  const flatListRef = useRef<FlatList<IProduct>>(null)
 
   useEffect(() => {
     if (listToImport && list.length === 0) {
@@ -19,19 +21,24 @@ export function ProductList({ listToImport }: IProductListProps) {
   }, [listToImport])
 
   return (
-    <KeyboardAwareFlatList
+    <FlatList
+      removeClippedSubviews={false}
       contentContainerStyle={{
         gap: 12,
+        paddingBottom: 100,
       }}
-      // style={{ height: height - 200 }}
+      ref={flatListRef}
       ListEmptyComponent={<ListEmpty />}
-      extraScrollHeight={130}
-      enableOnAndroid={true}
       keyboardShouldPersistTaps={'always'}
       data={list}
       keyExtractor={(product) => product.id}
-      renderItem={({ item }: { item: IProduct; index: number }) => (
-        <Product key={item.id} product={item} />
+      renderItem={({ item, index }: { item: IProduct; index: number }) => (
+        <Product
+          productIndex={index}
+          flatListRef={flatListRef}
+          key={item.id}
+          product={item}
+        />
       )}
     />
   )

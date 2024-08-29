@@ -1,16 +1,20 @@
-import { View, Text, TextInput, Keyboard } from 'react-native'
+import { View, Text, TextInput, Keyboard, FlatList } from 'react-native'
 import { Button } from '../../../global-components/button'
 import { Trash2 } from 'lucide-react-native'
 import { IProduct } from '../../../@types/interfaces'
-import { useContext, useState } from 'react'
+import { RefObject, useContext } from 'react'
 import { GlobalContext } from '../../../contexts/global-context-provider'
 
 interface IProductProps {
   product: IProduct
+  flatListRef: RefObject<FlatList<IProduct>>
+  productIndex: number
 }
 
 export function Product({
   product: { name, id, price, quantity },
+  flatListRef,
+  productIndex,
 }: IProductProps) {
   const { removeProductFromList, changePrice, changeQuantity } =
     useContext(GlobalContext)
@@ -35,8 +39,13 @@ export function Product({
         'bg-gray-400 flex-row justify-between items-center rounded-md mx-4 p-4'
       }
     >
-      <Text className={'text-white flex-1 '}>{name}</Text>
+      <Text className={'text-white flex-1'}>{name}</Text>
       <TextInput
+        onFocus={() => {
+          flatListRef.current?.scrollToIndex({
+            index: productIndex,
+          })
+        }}
         onSubmitEditing={() => {
           Keyboard.dismiss()
         }}

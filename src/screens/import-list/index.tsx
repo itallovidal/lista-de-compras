@@ -7,7 +7,7 @@ import { IImportProduct, INavigatorProps } from '../../@types/interfaces'
 
 export function ImportList() {
   const [text, setText] = React.useState<string>('')
-  const { navigate, setOptions } = useNavigation<INavigatorProps>()
+  const { navigate } = useNavigation<INavigatorProps>()
 
   function handleImportList() {
     if (text.length < 2) {
@@ -62,19 +62,6 @@ export function ImportList() {
         </View>
 
         <TextInput
-          onFocus={() => setOptions({ tabBarStyle: { display: 'none' } })}
-          onBlur={() =>
-            setOptions({
-              tabBarStyle: {
-                display: 'flex',
-                backgroundColor: '#202024',
-                borderTopWidth: 0,
-                paddingBottom: 56,
-                paddingTop: 36,
-                height: 'auto',
-              },
-            })
-          }
           style={{
             textAlignVertical: 'top',
           }}
