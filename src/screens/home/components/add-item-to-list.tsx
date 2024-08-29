@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import { Keyboard, TextInput, View } from 'react-native'
 import { Button } from '../../../global-components/button'
 import { Plus } from 'lucide-react-native'

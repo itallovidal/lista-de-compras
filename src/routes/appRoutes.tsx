@@ -2,8 +2,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import React from 'react'
 import colors from 'tailwindcss/colors'
 import { Home } from '../screens/home'
-import { House } from 'lucide-react-native'
+import { Download, House } from 'lucide-react-native'
 import { IAppRoutes } from '../@types/interfaces'
+import { ImportList } from '../screens/import-list'
 
 const { Navigator, Screen } = createBottomTabNavigator<IAppRoutes>()
 
@@ -36,14 +37,14 @@ export function AppRoutes() {
 
       {/* <Screen name={'popup'} component={PendingList} options={{headerShown: false, presentation: 'transparentModal', animation: 'fade' }} /> */}
 
-      {/* <Screen */}
-      {/*  name={'importList'} */}
-      {/*  component={ImportList} */}
-      {/*  options={{ */}
-      {/*    headerShown: false, */}
-      {/*    tabBarIcon: ({ color }) => <Icon as={<Export color={'#ffffff'} />} />, */}
-      {/*  }} */}
-      {/* /> */}
+      <Screen
+        name={'importList'}
+        component={ImportList}
+        options={{
+          headerShown: false,
+          tabBarIcon: () => <Download color={'white'} />,
+        }}
+      />
 
       {/* <Screen name={'history'} */}
       {/*        component={ImportList} */}

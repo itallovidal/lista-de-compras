@@ -8,9 +8,15 @@ interface IProduct {
   picked: boolean
 }
 
+type IImportProduct = Pick<IProduct, 'quantity' | 'name'>
+
 type IAppRoutes = {
-  home: undefined
-  // importList: undefined
+  home:
+    | undefined
+    | {
+        listToImport: IImportProduct[]
+      }
+  importList: undefined
   // popup: undefined
   // history: undefined
 }

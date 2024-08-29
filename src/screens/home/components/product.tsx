@@ -16,7 +16,6 @@ export function Product({
     useContext(GlobalContext)
 
   function handleChangePrice(text: string) {
-    console.log(text)
     if (text.includes(',') || text.includes('-') || text.includes(' ')) {
       return
     }
@@ -24,7 +23,6 @@ export function Product({
   }
 
   function handleChangeQuantity(text: string) {
-    console.log(text)
     if (text.includes(',') || text.includes('-') || text.includes(' ')) {
       return
     }

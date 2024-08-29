@@ -1,6 +1,5 @@
-// import { getStoredList } from '../utilities/AsyncStorage'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { IProduct } from '../@types/interfaces'
+import { IImportProduct, IProduct } from '../@types/interfaces'
 import { createContext, ReactNode, useEffect, useState } from 'react'
 import * as crypto from 'expo-crypto'
 import { storeProductList } from '../utils/store-product-list'
@@ -13,6 +12,7 @@ interface ContextProps {
   changePrice: (a: string, b: string) => void
   finishList: () => void
   changeQuantity: (a: string, b: string) => void
+  importList: (data: IImportProduct[]) => Promise<void>
 }
 
 export const GlobalContext = createContext({} as ContextProps)
@@ -88,6 +88,23 @@ function GlobalContextProvider({ children }: { children: ReactNode }) {
     await AsyncStorage.clear()
   }
 
+  async function importList(data: IImportProduct[]) {
+    console.log('importando..')
+    console.log(data)
+
+    const newList = data.map((item) => {
+      return {
+        id: `${crypto.randomUUID()}`,
+        picked: false,
+        price: '0',
+        ...item,
+      }
+    })
+
+    await storeProductList(newList)
+    setList(newList)
+  }
+
   return (
     <GlobalContext.Provider
       value={{
@@ -97,6 +114,7 @@ function GlobalContextProvider({ children }: { children: ReactNode }) {
         finishList,
         changePrice,
         changeQuantity,
+        importList,
       }}
     >
       {children}

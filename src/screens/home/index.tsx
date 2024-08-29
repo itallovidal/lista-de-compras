@@ -4,15 +4,24 @@ import { AddItemToList } from './components/add-item-to-list'
 import { ProductList } from './components/product-list'
 import GlobalContextProvider from '../../contexts/global-context-provider'
 import { ListResume } from './components/list-resume'
+import { useRoute } from '@react-navigation/native'
+import { IImportProduct } from '../../@types/interfaces'
 
 export function Home() {
+  const { params } = useRoute()
+  const routeParams = params as
+    | {
+        listToImport: IImportProduct[]
+      }
+    | undefined
+
   return (
     <GlobalContextProvider>
       <View className={'flex-1 bg-gray-700'}>
         <FinishList />
         <AddItemToList />
         <ListResume />
-        <ProductList />
+        <ProductList listToImport={routeParams?.listToImport} />
       </View>
     </GlobalContextProvider>
   )
