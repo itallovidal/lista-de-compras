@@ -1,9 +1,10 @@
-import { View, Text, TextInput, Keyboard, FlatList } from 'react-native'
+import { Text, TextInput, Keyboard, FlatList } from 'react-native'
 import { Button } from '../../../global-components/button'
 import { Trash2 } from 'lucide-react-native'
 import { IProduct } from '../../../@types/interfaces'
 import { RefObject, useContext } from 'react'
 import { GlobalContext } from '../../../contexts/global-context-provider'
+import Animated, { FadeIn, SlideOutRight } from 'react-native-reanimated'
 
 interface IProductProps {
   product: IProduct
@@ -34,7 +35,9 @@ export function Product({
   }
 
   return (
-    <View
+    <Animated.View
+      entering={FadeIn.delay(productIndex * 100)}
+      exiting={SlideOutRight}
       className={
         'bg-gray-400 flex-row justify-between items-center rounded-md mx-4 p-4'
       }
@@ -79,6 +82,6 @@ export function Product({
         className={'bg-transparent'}
         onPress={() => removeProductFromList(id)}
       />
-    </View>
+    </Animated.View>
   )
 }

@@ -1,11 +1,14 @@
 import { useContext, useEffect, useRef } from 'react'
-import { KeyboardAwareFlatList } from 'react-native-keyboard-aware-scroll-view'
 import { Product } from './product'
 import { IImportProduct, IProduct } from '../../../@types/interfaces'
 import { GlobalContext } from '../../../contexts/global-context-provider'
 import { ListEmpty } from './list-empty'
 import { FlatList } from 'react-native'
-
+import Animated, {
+  FadeIn,
+  LinearTransition,
+  SlideOutRight,
+} from 'react-native-reanimated'
 interface IProductListProps {
   listToImport: IImportProduct[] | undefined
 }
@@ -21,7 +24,8 @@ export function ProductList({ listToImport }: IProductListProps) {
   }, [listToImport])
 
   return (
-    <FlatList
+    <Animated.FlatList
+      itemLayoutAnimation={LinearTransition}
       removeClippedSubviews={false}
       contentContainerStyle={{
         gap: 12,
