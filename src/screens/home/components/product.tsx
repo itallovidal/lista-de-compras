@@ -4,7 +4,8 @@ import { Trash2 } from 'lucide-react-native'
 import { IProduct } from '../../../@types/interfaces'
 import { RefObject, useContext } from 'react'
 import { GlobalContext } from '../../../contexts/global-context-provider'
-import Animated, { FadeIn, SlideOutRight } from 'react-native-reanimated'
+import Animated, { FadeIn, FadeOutDown } from 'react-native-reanimated'
+import colors from 'tailwindcss/colors'
 
 interface IProductProps {
   product: IProduct
@@ -37,7 +38,7 @@ export function Product({
   return (
     <Animated.View
       entering={FadeIn.delay(productIndex * 100)}
-      exiting={SlideOutRight}
+      exiting={FadeOutDown}
       className={
         'bg-gray-400 flex-row justify-between items-center rounded-md mx-4 p-4'
       }
@@ -57,7 +58,7 @@ export function Product({
         maxLength={5}
         placeholderTextColor={'gray'}
         className={
-          'mx-1 text-white bg-gray-600 text-center w-16 p-2 rounded-md'
+          'mx-1 text-white bg-gray-600 text-center w-16 p-2 rounded-md '
         }
         placeholder={'R$'}
         keyboardType={'numeric'}
@@ -78,7 +79,7 @@ export function Product({
       />
 
       <Button
-        icon={<Trash2 color={'red'} size={24} />}
+        icon={<Trash2 color={colors.red['500']} size={24} />}
         className={'bg-transparent'}
         onPress={() => removeProductFromList(id)}
       />

@@ -5,20 +5,30 @@ interface IProduct {
   name: string
   price: string
   quantity: string
-  picked: boolean
 }
 
 type IImportProduct = Pick<IProduct, 'quantity' | 'name'>
+
+interface IHistoryList {
+  id: string
+  createdAt: Date
+  list: IProduct[]
+}
 
 type IAppRoutes = {
   home:
     | undefined
     | {
-        listToImport: IImportProduct[]
+        list: IImportProduct[]
+        fromHistory: boolean
       }
   importList: undefined
-  // popup: undefined
-  // history: undefined
+  history: undefined
 }
 
 interface INavigatorProps extends BottomTabNavigationProp<IAppRoutes> {}
+
+interface IParamProps {
+  list: IImportProduct[] | IProduct[]
+  fromHistory: boolean
+}

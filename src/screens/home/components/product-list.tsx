@@ -1,27 +1,29 @@
 import { useContext, useEffect, useRef } from 'react'
 import { Product } from './product'
-import { IImportProduct, IProduct } from '../../../@types/interfaces'
+import { IParamProps, IProduct } from '../../../@types/interfaces'
 import { GlobalContext } from '../../../contexts/global-context-provider'
 import { ListEmpty } from './list-empty'
 import { FlatList } from 'react-native'
-import Animated, {
-  FadeIn,
-  LinearTransition,
-  SlideOutRight,
-} from 'react-native-reanimated'
+import Animated, { LinearTransition } from 'react-native-reanimated'
+
 interface IProductListProps {
-  listToImport: IImportProduct[] | undefined
+  params: IParamProps | undefined
 }
 
-export function ProductList({ listToImport }: IProductListProps) {
-  const { list, importList } = useContext(GlobalContext)
+export function ProductList({ params }: IProductListProps) {
+  const { list, importList, reuseList } = useContext(GlobalContext)
   const flatListRef = useRef<FlatList<IProduct>>(null)
 
   useEffect(() => {
-    if (listToImport && list.length === 0) {
-      importList(listToImport)
+    if (!params) return
+
+    if (!params.fromHistory) {
+      importList(params.list)
+      return
     }
-  }, [listToImport])
+
+    reuseList(params.list as IProduct[])
+  }, [params])
 
   return (
     <Animated.FlatList
@@ -40,7 +42,6 @@ export function ProductList({ listToImport }: IProductListProps) {
         <Product
           productIndex={index}
           flatListRef={flatListRef}
-          key={item.id}
           product={item}
         />
       )}

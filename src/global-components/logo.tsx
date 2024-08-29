@@ -3,5 +3,10 @@ import React from 'react'
 import logo from '../assets/logo.png'
 
 export function Logo() {
-  return <Image className={'object-contain w-[200] h-[50]'} source={logo} />
+  return (
+    <Image
+      className={'object-contain w-[200] self-center h-[50]'}
+      source={logo}
+    />
+  )
 }

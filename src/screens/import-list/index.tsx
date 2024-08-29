@@ -30,13 +30,17 @@ export function ImportList() {
 
       return {
         name: strings,
-        quantity: quantity === 0 || quantity > 50 ? '1' : quantity.toString(),
+        quantity:
+          quantity === 0 || quantity > 50 || isNaN(quantity)
+            ? '1'
+            : quantity.toString(),
       } as unknown as IImportProduct
     })
 
     setText('')
     navigate('home', {
-      listToImport: newList,
+      list: newList,
+      fromHistory: false,
     })
   }
 
@@ -45,22 +49,6 @@ export function ImportList() {
       <Header />
 
       <View className={'p-4 flex-1'}>
-        <Text className={'text-white text-2xl font-bold'}>
-          Importação de lista.
-        </Text>
-
-        <Text className={'text-white leading-6 text-md'}>
-          Cole a lista com o padrão abaixo para que ela possa ser importada
-          automaticamente.
-        </Text>
-
-        <View className={'my-6'}>
-          <Text className={'italic text-blue-700'}>2 peras </Text>
-          <Text className={'italic text-blue-700'}>1 maçã </Text>
-          <Text className={'italic text-blue-700'}>batata</Text>
-          <Text className={'italic text-blue-700'}>300g de mussarela</Text>
-        </View>
-
         <TextInput
           style={{
             textAlignVertical: 'top',

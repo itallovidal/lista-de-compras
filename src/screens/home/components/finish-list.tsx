@@ -5,14 +5,18 @@ import { Button } from '../../../global-components/button'
 import { GlobalContext } from '../../../contexts/global-context-provider'
 
 export function FinishList() {
-  const { finishList } = useContext(GlobalContext)
+  const { finishList, list } = useContext(GlobalContext)
 
   return (
     <View
       className={'bg-transparent p-4 justify-between items-center flex-row'}
     >
       <Logo />
-      <Button onPress={finishList} className={'bg-gray-600'}>
+      <Button
+        disabled={list.length === 0}
+        onPress={finishList}
+        className={`bg-gray-600 ${list.length === 0 && 'opacity-20'}`}
+      >
         Finalizar lista
       </Button>
     </View>

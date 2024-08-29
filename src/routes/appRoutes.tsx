@@ -2,9 +2,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import React from 'react'
 import colors from 'tailwindcss/colors'
 import { Home } from '../screens/home'
-import { Download, House } from 'lucide-react-native'
-import { IAppRoutes } from '../@types/interfaces'
 import { ImportList } from '../screens/import-list'
+import { History } from '../screens/history'
+import { Download, House, History as LucideHistory } from 'lucide-react-native'
+import { IAppRoutes } from '../@types/interfaces'
 
 const { Navigator, Screen } = createBottomTabNavigator<IAppRoutes>()
 
@@ -36,8 +37,6 @@ export function AppRoutes() {
         }}
       />
 
-      {/* <Screen name={'popup'} component={PendingList} options={{headerShown: false, presentation: 'transparentModal', animation: 'fade' }} /> */}
-
       <Screen
         name={'importList'}
         component={ImportList}
@@ -47,12 +46,16 @@ export function AppRoutes() {
         }}
       />
 
-      {/* <Screen name={'history'} */}
-      {/*        component={ImportList} */}
-      {/*        options={{ */}
-      {/*            headerShown: false, */}
-      {/*            tabBarIcon: ({color})=> <Icon as={ClockClockwise} color={color}/> */}
-      {/* }}/> */}
+      <Screen
+        name={'history'}
+        component={History}
+        options={{
+          headerShown: false,
+          tabBarIcon: () => <LucideHistory color={'white'} />,
+        }}
+      />
     </Navigator>
   )
 }
+
+// {/* <Screen name={'popup'} component={PendingList} options={{headerShown: false, presentation: 'transparentModal', animation: 'fade' }} /> */}

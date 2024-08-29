@@ -1,9 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { IImportProduct, IProduct } from '../@types/interfaces'
+import { IHistoryList, IImportProduct, IProduct } from '../@types/interfaces'
 import { createContext, ReactNode, useEffect, useState } from 'react'
 import * as crypto from 'expo-crypto'
-import { storeProductList } from '../utils/store-product-list'
-import { getStoredList } from '../utils/get-stored-list'
+import { saveActualProductList } from '../utils/save-actual-product-list'
+import { getActualProductList } from '../utils/get-actual-product-list'
+import { saveListInHistory } from '../utils/save-list-in-history'
 
 interface ContextProps {
   list: IProduct[]
@@ -13,6 +14,7 @@ interface ContextProps {
   finishList: () => void
   changeQuantity: (a: string, b: string) => void
   importList: (data: IImportProduct[]) => Promise<void>
+  reuseList: (a: IProduct[]) => void
 }
 
 export const GlobalContext = createContext({} as ContextProps)
@@ -21,7 +23,7 @@ function GlobalContextProvider({ children }: { children: ReactNode }) {
   const [list, setList] = useState<IProduct[]>([])
 
   useEffect(() => {
-    getStoredList().then((data) => {
+    getActualProductList().then((data) => {
       if (data) {
         setList(data)
       }
@@ -29,8 +31,10 @@ function GlobalContextProvider({ children }: { children: ReactNode }) {
   }, [])
 
   useEffect(() => {
+    console.log(list)
+
     if (list.length > 0 && list.length % 3 === 0) {
-      storeProductList(list).then(() =>
+      saveActualProductList(list).then(() =>
         console.log('lista salva no local storage.'),
       )
     }
@@ -44,9 +48,6 @@ function GlobalContextProvider({ children }: { children: ReactNode }) {
       price: '0',
       quantity: '1',
     }
-
-    console.log('Produto sendo adicionado:')
-    console.log(product)
 
     setList((prevProducts) => {
       return [product, ...prevProducts]
@@ -84,8 +85,9 @@ function GlobalContextProvider({ children }: { children: ReactNode }) {
   }
 
   async function finishList() {
+    await saveListInHistory(list)
     setList([])
-    await AsyncStorage.clear()
+    await AsyncStorage.removeItem('actual-product-list')
   }
 
   async function importList(data: IImportProduct[]) {
@@ -95,14 +97,18 @@ function GlobalContextProvider({ children }: { children: ReactNode }) {
     const newList = data.map((item) => {
       return {
         id: `${crypto.randomUUID()}`,
-        picked: false,
         price: '0',
         ...item,
       }
     })
 
-    await storeProductList(newList)
+    await saveActualProductList(newList)
     setList(newList)
+  }
+
+  async function reuseList(history: IProduct[]) {
+    setList(history)
+    await saveActualProductList(history)
   }
 
   return (
@@ -115,6 +121,7 @@ function GlobalContextProvider({ children }: { children: ReactNode }) {
         changePrice,
         changeQuantity,
         importList,
+        reuseList,
       }}
     >
       {children}

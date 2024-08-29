@@ -1,15 +1,11 @@
-import { Keyboard, View } from 'react-native'
+import { View } from 'react-native'
 import { FinishList } from './components/finish-list'
 import { AddItemToList } from './components/add-item-to-list'
 import { ProductList } from './components/product-list'
 import GlobalContextProvider from '../../contexts/global-context-provider'
 import { ListResume } from './components/list-resume'
 import { useRoute } from '@react-navigation/native'
-import { IImportProduct } from '../../@types/interfaces'
-
-interface IParamProps {
-  listToImport: IImportProduct[]
-}
+import { IParamProps } from '../../@types/interfaces'
 
 export function Home() {
   const { params } = useRoute()
@@ -21,7 +17,7 @@ export function Home() {
         <FinishList />
         <AddItemToList />
         <ListResume />
-        <ProductList listToImport={routeParams?.listToImport} />
+        <ProductList params={routeParams} />
       </View>
     </GlobalContextProvider>
   )
