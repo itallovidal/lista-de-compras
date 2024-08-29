@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "listinha-de-compras",
-    "slug": "listinha-de-compras",
-    "version": "1.0.0",
+    "name": "Lista de Compras",
+    "slug": "lista-de-compras",
+    "version": "4.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./src/assets/app/appicon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "image": "./src/assets/app/splashimage.png",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "ios": {
@@ -16,12 +16,18 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./src/assets/app/adaptativeicon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.ividalll.lista.de.compras"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "27ce72de-351a-47ba-bba3-454bb5d8b4ac"
+      }
     }
   }
 }
