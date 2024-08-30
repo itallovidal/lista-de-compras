@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { IHistoryList, IImportProduct, IProduct } from '../@types/interfaces'
+import { IImportProduct, IProduct } from '../@types/interfaces'
 import { createContext, ReactNode, useEffect, useState } from 'react'
 import * as crypto from 'expo-crypto'
 import { saveActualProductList } from '../utils/save-actual-product-list'
@@ -31,8 +31,6 @@ function GlobalContextProvider({ children }: { children: ReactNode }) {
   }, [])
 
   useEffect(() => {
-    console.log(list)
-
     if (list.length > 0 && list.length % 3 === 0) {
       saveActualProductList(list).then(() =>
         console.log('lista salva no local storage.'),
@@ -42,7 +40,7 @@ function GlobalContextProvider({ children }: { children: ReactNode }) {
 
   function addProductToList(newItem: string) {
     const product = {
-      id: `${crypto.randomUUID()}`,
+      id: crypto.randomUUID(),
       picked: false,
       name: newItem,
       price: '0',
@@ -96,7 +94,7 @@ function GlobalContextProvider({ children }: { children: ReactNode }) {
 
     const newList = data.map((item) => {
       return {
-        id: `${crypto.randomUUID()}`,
+        id: crypto.randomUUID(),
         price: '0',
         ...item,
       }

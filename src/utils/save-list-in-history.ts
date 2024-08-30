@@ -4,11 +4,12 @@ import * as crypto from 'expo-crypto'
 import { getUserHistory } from './get-user-history'
 
 export async function saveListInHistory(data: IProduct[]): Promise<void> {
+
   const { history } = await getUserHistory()
   let updatedHistory
 
   const record = {
-    id: `${crypto.randomUUID()}`,
+    id: crypto.randomUUID(),
     list: data,
     createdAt: new Date(),
   }

@@ -18,11 +18,9 @@ export function HistoryContextProvider({ children }: { children: ReactNode }) {
   }
 
   async function handleRemoveHistoryRecordById(id: string) {
-    console.log('ID para apagar:')
-    console.log(id)
     const updatedHistory = history.filter((record) => record.id !== id)
-    setHistory(updatedHistory)
     await updateHistory(updatedHistory)
+    setHistory(updatedHistory)
   }
 
   return (

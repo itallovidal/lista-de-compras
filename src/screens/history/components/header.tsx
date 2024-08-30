@@ -11,7 +11,7 @@ export function Header() {
         Histórico
       </Text>
 
-      <Text className={'text-white leading-6 text-md'}>
+      <Text className={' w-full text-white leading-6 text-md'}>
         Veja o histórico das últimas 5 compras e sua despesa total. Clique na
         lista para importar e reutilizar.
       </Text>

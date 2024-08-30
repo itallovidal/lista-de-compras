@@ -1,6 +1,6 @@
 import React from 'react'
 import { Text, View } from 'react-native'
-import { IProduct } from '../../../@types/interfaces'
+import { IProduct } from '../../../../@types/interfaces'
 
 interface IItemProps {
   product: IProduct
