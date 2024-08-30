@@ -21,30 +21,27 @@ export function HistoryFlatlist() {
   )
 
   return (
-    <>
-      <Text className={'mx-4 text-white'}>{history.length}</Text>
-
-      <Animated.FlatList
-        ListEmptyComponent={<HistoryFlatListEmpty />}
-        itemLayoutAnimation={LinearTransition}
-        className={'flex-1 bg-blue-400 mx-4 mb-4'}
-        contentContainerStyle={{
-          gap: 12,
-        }}
-        data={history}
-        renderItem={({ item }) => {
-          console.log('renderizando...')
-          console.log(item)
-          return (
-            <List
-              key={item.id}
-              createdAt={item.createdAt}
-              list={item.list}
-              id={item.id}
-            />
-          )
-        }}
-      />
-    </>
+    <Animated.FlatList
+      removeClippedSubviews={false}
+      ListEmptyComponent={<HistoryFlatListEmpty />}
+      itemLayoutAnimation={LinearTransition}
+      className={'flex-1 mx-4 mb-4'}
+      contentContainerStyle={{
+        gap: 12,
+      }}
+      data={history}
+      renderItem={({ item }) => {
+        console.log('renderizando...')
+        console.log(item)
+        return (
+          <List
+            key={item.id}
+            createdAt={item.createdAt}
+            list={item.list}
+            id={item.id}
+          />
+        )
+      }}
+    />
   )
 }
