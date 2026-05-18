@@ -1,5 +1,6 @@
-import React, { createContext, useState, useCallback, ReactNode } from 'react';
+import React, { createContext, useState, useCallback, useEffect, ReactNode } from 'react';
 import { ShoppingItem, ShoppingList } from '../types/shopping';
+import { saveShoppingList, loadShoppingList } from '../lib/storage';
 
 interface ShoppingContextType {
   list: ShoppingList;
@@ -21,6 +22,16 @@ export const ShoppingProvider: React.FC<ShoppingProviderProps> = ({ children }) 
     total: 0,
   });
 
+  useEffect(() => {
+    const loadList = async () => {
+      const savedList = await loadShoppingList();
+      if (savedList) {
+        setList(savedList);
+      }
+    };
+    loadList();
+  }, []);
+
   const calculateTotal = useCallback((items: ShoppingItem[]): number => {
     return items.reduce((sum, item) => {
       const price = item.price || 0;
@@ -40,10 +51,12 @@ export const ShoppingProvider: React.FC<ShoppingProviderProps> = ({ children }) 
         quantity: 1,
       };
       const newItems = [...prev.items, newItem];
-      return {
+      const newList = {
         items: newItems,
         total: calculateTotal(newItems),
       };
+      saveShoppingList(newList);
+      return newList;
     });
   }, [calculateTotal]);
 
@@ -62,10 +75,12 @@ export const ShoppingProvider: React.FC<ShoppingProviderProps> = ({ children }) 
   const removeItem = useCallback((id: string) => {
     setList((prev) => {
       const newItems = prev.items.filter((item) => item.id !== id);
-      return {
+      const newList = {
         items: newItems,
         total: calculateTotal(newItems),
       };
+      saveShoppingList(newList);
+      return newList;
     });
   }, [calculateTotal]);
 
