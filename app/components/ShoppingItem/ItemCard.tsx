@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { CaretUpIcon, CaretDownIcon, TrashIcon } from 'phosphor-react-native';
 import { ShoppingItem as ShoppingItemType } from '../../types/shopping';
-import { formatCurrency } from '../../lib/formatCurrency';
 
 interface ItemCardProps {
   item: ShoppingItemType;
@@ -16,45 +16,99 @@ export const ItemCard: React.FC<ItemCardProps> = ({
   onUpdateQuantity,
   onRemove,
 }) => {
+  const isMinQty = item.quantity <= 1;
+
   return (
-    <View className="bg-gray-600 rounded-xl p-4 mb-3">
-      <View className="flex-row items-center justify-between mb-3">
-        <Text className="text-white text-lg font-semibold flex-1 mr-2">{item.name}</Text>
-        <Text className="text-blue-600 font-bold text-lg">
-          {formatCurrency(item.price * item.quantity)}
-        </Text>
-      </View>
-      <View className="flex-row items-center gap-3">
-        <View className="flex-row items-center bg-gray-500 rounded-lg px-3 py-2 flex-1">
-          <Text className="text-gray-400 text-xs mr-2">R$</Text>
-          <TextInput
-            className="text-white text-sm flex-1"
-            value={item.price > 0 ? item.price.toString() : ''}
-            onChangeText={(text) => onUpdatePrice(parseFloat(text) || 0)}
-            keyboardType="numeric"
-            placeholder="0,00"
-            placeholderTextColor="#8D8D99"
-          />
-        </View>
-        <View className="flex-row items-center bg-gray-500 rounded-lg px-3 py-2 flex-1">
-          <Text className="text-gray-400 text-xs mr-2">Qtd</Text>
-          <TextInput
-            className="text-white text-sm flex-1"
-            value={item.quantity > 0 ? item.quantity.toString() : ''}
-            onChangeText={(text) => onUpdateQuantity(parseInt(text, 10) || 1)}
-            keyboardType="numeric"
-            placeholder="1"
-            placeholderTextColor="#8D8D99"
-          />
-        </View>
+    <View
+      style={{
+        backgroundColor: '#1f2937', // gray-800
+        borderRadius: 16,
+        padding: 14,
+        marginBottom: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 8,
+        elevation: 6,
+        borderWidth: 1,
+        borderColor: 'rgba(255,255,255,0.06)',
+      }}
+    >
+      {/* Nome */}
+      <Text
+        numberOfLines={1}
+        ellipsizeMode="tail"
+        style={{ flex: 1, color: 'white', fontSize: 15, fontWeight: '600' }}
+      >
+        {item.name}
+      </Text>
+
+      {/* Stepper unificado */}
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          backgroundColor: '#374151', // gray-700
+          borderRadius: 10,
+          overflow: 'hidden',
+        }}
+      >
         <TouchableOpacity
-          onPress={onRemove}
-          className="bg-red-500/20 px-3 py-2 rounded-lg"
+          onPress={() => onUpdateQuantity(item.quantity + 1)}
+          style={{ padding: 8 }}
           activeOpacity={0.7}
         >
-          <Text className="text-red-500 text-xl">✕</Text>
+          <CaretUpIcon size={14} color="white" weight="regular" />
+        </TouchableOpacity>
+
+        <Text style={{ color: 'white', fontSize: 14, fontWeight: '700', minWidth: 20, textAlign: 'center' }}>
+          {item.quantity}
+        </Text>
+
+        <TouchableOpacity
+          onPress={() => !isMinQty && onUpdateQuantity(item.quantity - 1)}
+          style={{ padding: 8, opacity: isMinQty ? 0.3 : 1 }}
+          activeOpacity={isMinQty ? 1 : 0.7}
+        >
+          <CaretDownIcon size={14} color="white" weight="regular" />
         </TouchableOpacity>
       </View>
+
+      {/* Input preço */}
+      <View
+        style={{
+          backgroundColor: '#374151', // gray-700
+          borderRadius: 10,
+          paddingHorizontal: 10,
+          paddingVertical: 6,
+          width: 80,
+        }}
+      >
+        <TextInput
+          style={{ color: 'white', fontSize: 13, textAlign: 'center' }}
+          value={item.price > 0 ? item.price.toString() : ''}
+          onChangeText={(text) => onUpdatePrice(parseFloat(text) || 0)}
+          keyboardType="numeric"
+          placeholder="0,00"
+          placeholderTextColor="rgba(255,255,255,0.3)"
+        />
+      </View>
+
+      {/* Lixeira */}
+      <TouchableOpacity
+        onPress={onRemove}
+        activeOpacity={0.7}
+        style={{
+          backgroundColor: 'rgba(239,68,68,0.15)',
+          borderRadius: 10,
+          padding: 8,
+        }}
+      >
+        <TrashIcon size={18} color="#ef4444" weight="regular" />
+      </TouchableOpacity>
     </View>
   );
 };
