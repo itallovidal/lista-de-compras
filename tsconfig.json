@@ -1,0 +1,14 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "types": [
+      "nativewind/types"
+    ]
+  },
+  "include": [
+    "nativewind-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ]
+}
