@@ -8,8 +8,8 @@ export const HomeScreen: React.FC = () => {
   const { list, addItem, updateItem, removeItem, getTotal } = useShopping();
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-700">
-      <StatusBar barStyle="light-content" backgroundColor="#121214" />
+    <SafeAreaView className="flex-1 bg-gray-900">
+      <StatusBar barStyle="light-content" backgroundColor="#3B82F6" />
       <Header total={getTotal()} onAddItem={addItem} />
       <ShoppingList
         items={list.items}

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { formatCurrency } from '../../lib/formatCurrency';
 
 interface HeaderProps {
@@ -18,39 +19,66 @@ export const Header: React.FC<HeaderProps> = ({ total, onAddItem }) => {
   };
 
   return (
-    <View className="bg-gray-700 px-5 pt-6 pb-5">
-      <View className="flex-row justify-between items-center mb-6">
-        <View>
-          <Text className="text-white text-2xl font-bold">Lista de Compras</Text>
-          <Text className="text-gray-400 text-sm mt-1">Adicione seus itens</Text>
-        </View>
-        <View className="bg-blue-600 px-4 py-3 rounded-xl">
-          <Text className="text-white text-xs font-medium opacity-80">Total</Text>
-          <Text className="text-white font-bold text-lg">
-            {formatCurrency(total)}
-          </Text>
-        </View>
+    <LinearGradient
+      colors={['#3B82F6', '#6366F1']}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={{ paddingHorizontal: 20, paddingTop: 24, paddingBottom: 24 }}
+    >
+      {/* Title */}
+      <Text style={{ color: 'rgba(255,255,255,0.75)', fontSize: 13, fontWeight: '600', letterSpacing: 1.2, textTransform: 'uppercase', marginBottom: 4 }}>
+        Lista de Compras
+      </Text>
+
+      {/* Total em destaque */}
+      <View style={{ marginBottom: 20 }}>
+        <Text style={{ color: 'white', fontSize: 36, fontWeight: '800', letterSpacing: -0.5 }}>
+          {formatCurrency(total)}
+        </Text>
+        <Text style={{ color: 'rgba(255,255,255,0.65)', fontSize: 13, marginTop: 2 }}>
+          total estimado
+        </Text>
       </View>
-      <View className="flex-row gap-3">
-        <View className="flex-1 bg-gray-600 rounded-xl flex-row items-center px-4">
+
+      {/* Input + Botão */}
+      <View style={{ flexDirection: 'row', gap: 10 }}>
+        <View style={{
+          flex: 1,
+          backgroundColor: 'rgba(255,255,255,0.15)',
+          borderRadius: 14,
+          flexDirection: 'row',
+          alignItems: 'center',
+          paddingHorizontal: 14,
+          borderWidth: 1,
+          borderColor: 'rgba(255,255,255,0.25)',
+        }}>
           <TextInput
-            className="flex-1 py-3 text-white text-base"
+            style={{ flex: 1, paddingVertical: 13, color: 'white', fontSize: 15 }}
             value={inputValue}
             onChangeText={setInputValue}
-            placeholder="Digite o nome do item..."
-            placeholderTextColor="#8D8D99"
+            placeholder="Nome do item..."
+            placeholderTextColor="rgba(255,255,255,0.5)"
             onSubmitEditing={handleAdd}
             returnKeyType="done"
           />
         </View>
         <TouchableOpacity
           onPress={handleAdd}
-          className="bg-blue-600 px-6 rounded-xl justify-center items-center"
-          activeOpacity={0.8}
+          activeOpacity={0.85}
+          style={{
+            width: 50,
+            height: 50,
+            backgroundColor: 'rgba(255,255,255,0.2)',
+            borderRadius: 14,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderWidth: 1,
+            borderColor: 'rgba(255,255,255,0.35)',
+          }}
         >
-          <Text className="text-white font-bold text-base">+</Text>
+          <Text style={{ color: 'white', fontSize: 26, fontWeight: '300', lineHeight: 30 }}>+</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </LinearGradient>
   );
 };
