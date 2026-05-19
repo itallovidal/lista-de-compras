@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { ScrollView, View, Text, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { formatCurrency } from "../../lib/formatCurrency";
 import { Input } from "../lib/Input";
@@ -15,27 +15,10 @@ import {
 import { ArrowArcLeftIcon, FloppyDiskBackIcon } from "phosphor-react-native";
 import { Separator } from "../lib/separator";
 import { ArrowLeftIcon } from "lucide-react-native";
-
-const SUGGESTION_CATALOG = [
-  {
-    name: "Limpeza",
-    products: ["Detergente", "Desinfetante", "Sabão em pó"],
-  },
-  {
-    name: "Higiene",
-    products: ["Sabonete", "Shampoo", "Papel higiênico"],
-  },
-  {
-    name: "Bebidas",
-    products: ["Água", "Refrigerante", "Cerveja"],
-  },
-  {
-    name: "Frios",
-    products: ["Queijo", "Presunto", "Mortadela"],
-  },
-] as const;
-
-type SuggestionCategoryName = (typeof SUGGESTION_CATALOG)[number]["name"];
+import {
+  SUGGESTION_CATALOG,
+  type SuggestionCategoryName,
+} from "../../data/suggestionCatalog";
 
 interface SuggestedSelection {
   category: SuggestionCategoryName;
@@ -225,7 +208,7 @@ export function Header({
       </LinearGradient>
 
       <Dialog open={suggestionOpen} onOpenChange={handleSuggestionOpenChange}>
-        <DialogContent className="rounded-lg">
+        <DialogContent className="rounded-lg h-5/6">
           <DialogHeader>
             <DialogTitle>Adicionar por sugestões</DialogTitle>
             <DialogDescription>
@@ -234,9 +217,9 @@ export function Header({
             </DialogDescription>
           </DialogHeader>
 
-          <View className="gap-4">
+          <View className="gap-4 flex-1 ">
             {selectedCategory ? (
-              <View className="gap-3">
+              <View className="gap-3 flex-1">
                 <View className="flex-row items-center justify-between gap-3">
                   <TouchableOpacity
                     onPress={handleBackToCategories}
@@ -252,51 +235,55 @@ export function Header({
                   </Text>
                 </View>
 
-                <View className="flex-row flex-wrap gap-2">
-                  {activeCategory?.products.map((product) => {
-                    const isSelected = selectedProducts.some(
-                      (item) =>
-                        item.category === selectedCategory &&
-                        item.name === product,
-                    );
+                <ScrollView className="flex-1" showsVerticalScrollIndicator>
+                  <View className="flex-row flex-wrap gap-2">
+                    {activeCategory?.products.map((product) => {
+                      const isSelected = selectedProducts.some(
+                        (item) =>
+                          item.category === selectedCategory &&
+                          item.name === product,
+                      );
 
-                    return (
-                      <TouchableOpacity
-                        key={`${selectedCategory}-${product}`}
-                        onPress={() =>
-                          handleToggleProduct(selectedCategory, product)
-                        }
-                        activeOpacity={0.85}
-                        className={
-                          isSelected
-                            ? "rounded-full border border-blue-300 bg-blue-500/30 px-4 py-3"
-                            : "rounded-full border border-gray-700 bg-gray-800 px-4 py-3"
-                        }
-                      >
-                        <Text className="text-white font-semibold">
-                          {isSelected ? "✓ " : ""}
-                          {product}
-                        </Text>
-                      </TouchableOpacity>
-                    );
-                  })}
-                </View>
+                      return (
+                        <TouchableOpacity
+                          key={`${selectedCategory}-${product}`}
+                          onPress={() =>
+                            handleToggleProduct(selectedCategory, product)
+                          }
+                          activeOpacity={0.85}
+                          className={
+                            isSelected
+                              ? "rounded-full border border-blue-300 bg-blue-500/30 px-4 py-3"
+                              : "rounded-full border border-gray-700 bg-gray-800 px-4 py-3"
+                          }
+                        >
+                          <Text className="text-white font-semibold">
+                            {isSelected ? "✓ " : ""}
+                            {product}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    })}
+                  </View>
+                </ScrollView>
               </View>
             ) : (
-              <View className="flex-row flex-wrap gap-2">
-                {SUGGESTION_CATALOG.map((category) => (
-                  <TouchableOpacity
-                    key={category.name}
-                    onPress={() => handleSelectCategory(category.name)}
-                    activeOpacity={0.85}
-                    className="rounded-full border border-white/20 bg-white/10 px-4 py-3"
-                  >
-                    <Text className="text-white font-semibold">
-                      {category.name}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
+              <ScrollView className="flex-1" showsVerticalScrollIndicator>
+                <View className="flex-row flex-wrap gap-2">
+                  {SUGGESTION_CATALOG.map((category) => (
+                    <TouchableOpacity
+                      key={category.name}
+                      onPress={() => handleSelectCategory(category.name)}
+                      activeOpacity={0.85}
+                      className="rounded-full border border-white/20 bg-white/10 px-4 py-3"
+                    >
+                      <Text className="text-white font-semibold">
+                        {category.name}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </ScrollView>
             )}
           </View>
 

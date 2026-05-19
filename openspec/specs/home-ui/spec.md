@@ -1,4 +1,4 @@
-## MODIFIED Requirements
+## Requirements
 
 ### Requirement: Header com gradiente
 O header da HomeScreen SHALL exibir um gradiente de cor azul para índigo (`#3B82F6` → `#6366F1`) substituindo o fundo cinza plano, usando `expo-linear-gradient`.
@@ -57,13 +57,13 @@ O fluxo de adição de itens SHALL abrir um dialog de sugestões quando a ação
 - **THEN** o sistema abre o dialog de sugestões
 - **AND THEN** nenhum item é adicionado diretamente
 
-### Requirement: Categorias iniciais em botões
-O dialog SHALL exibir categorias iniciais como botões organizados em múltiplas linhas para permitir navegação rápida.
+### Requirement: Categorias iniciais em botões com scroll
+O dialog SHALL exibir as categorias iniciais como botões organizados em uma lista com scroll vertical para acomodar o número expandido de categorias (15 categorias).
 
-#### Scenario: Lista inicial de categorias
+#### Scenario: Lista de categorias com scroll
 - **WHEN** o dialog de sugestões abre
-- **THEN** o usuário vê categorias como Limpeza, Higiene e Bebidas em formato de botões
-- **AND THEN** os botões aparecem quebrando linha conforme o espaço disponível
+- **THEN** o usuário vê todas as 15 categorias em formato de botões
+- **AND THEN** a lista de categorias é rolável verticalmente
 
 ### Requirement: Produtos por categoria
 Ao selecionar uma categoria, o dialog SHALL substituir a lista de categorias pelos produtos daquela categoria.
@@ -96,9 +96,10 @@ Quando o campo de texto contiver valor, a ação de adicionar SHALL continuar cr
 - **THEN** o item é adicionado diretamente
 - **AND THEN** o campo é limpo após a ação
 
-### Requirement: Catálogo inicial enxuto
-O conjunto inicial de categorias e produtos SHALL ser pequeno e fixo para validar a experiência antes de ampliar o catálogo.
+### Requirement: Catálogo completo de produtos
+O conjunto de categorias e produtos SHALL ser completo, cobrindo 15 setores de supermercado com 10 produtos cada, definido em arquivo de dados dedicado.
 
-#### Scenario: Primeira validação
+#### Scenario: Catálogo completo disponível
 - **WHEN** o dialog é aberto pela primeira vez
-- **THEN** o usuário vê apenas um conjunto limitado de categorias e produtos
+- **THEN** o usuário vê todas as 15 categorias do catálogo expandido
+- **AND THEN** cada categoria contém 10 produtos específicos do setor
