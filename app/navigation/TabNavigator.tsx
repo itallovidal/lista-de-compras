@@ -1,6 +1,7 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { HomeScreen } from "../pages/HomeScreen";
 import { ImportScreen } from "../pages/ImportScreen";
 import { HistoryScreen } from "../pages/HistoryScreen";
@@ -32,6 +33,8 @@ const TabIcon = ({ name, focused }: { name: string; focused: boolean }) => {
 };
 
 export const TabNavigator: React.FC = () => {
+  const insets = useSafeAreaInsets();
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -41,12 +44,13 @@ export const TabNavigator: React.FC = () => {
         tabBarActiveTintColor: colors.white,
         tabBarInactiveTintColor: colors.gray[500],
         headerShown: false,
+        tabBarHideOnKeyboard: true,
         tabBarStyle: {
           backgroundColor: colors.gray[900],
           borderTopColor: colors.gray[800],
           borderTopWidth: 1,
-          paddingBottom: 24,
-          height: 82,
+          paddingBottom: Math.max(insets.bottom, 12),
+          height: 58 + Math.max(insets.bottom, 12),
         },
         tabBarLabelStyle: {
           fontSize: 12,

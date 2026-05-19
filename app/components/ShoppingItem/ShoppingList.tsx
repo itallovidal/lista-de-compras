@@ -1,8 +1,10 @@
 import React from "react";
-import { ScrollView, View, Text } from "react-native";
+import { View, Text } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { LinearGradient } from "expo-linear-gradient";
 import { ShoppingItem as ShoppingItemType } from "../../types/shopping";
 import { ItemCard } from "./ItemCard";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface ShoppingListProps {
   items: ShoppingItemType[];
@@ -15,6 +17,8 @@ export function ShoppingList({
   onUpdateItem,
   onRemoveItem,
 }: ShoppingListProps) {
+  const insets = useSafeAreaInsets();
+
   if (items.length === 0) {
     return (
       <View className="flex-1 justify-center items-center px-4 bg-gray-900 overflow-hidden">
@@ -54,11 +58,15 @@ export function ShoppingList({
   }
 
   return (
-    <ScrollView
+    <KeyboardAwareScrollView
       className="flex-1 py-4 bg-gray-900 mx-2"
+      contentContainerStyle={{ paddingBottom: insets.bottom + 96 }}
+      keyboardShouldPersistTaps="handled"
       showsVerticalScrollIndicator={false}
+      enableOnAndroid={true}
+      extraScrollHeight={16}
     >
       {items.map(renderItemCard)}
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 }
