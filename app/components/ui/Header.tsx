@@ -3,13 +3,16 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { formatCurrency } from "../../lib/formatCurrency";
 import { Input } from "../lib/Input";
+import { Tooltip } from "../lib/Tooltip";
+import { FloppyDiskIcon } from "phosphor-react-native";
 
 interface HeaderProps {
   total: number;
   onAddItem: (name: string) => void;
+  onSave: () => void;
 }
 
-export function Header({ total, onAddItem }: HeaderProps) {
+export function Header({ total, onAddItem, onSave }: HeaderProps) {
   const [inputValue, setInputValue] = useState("");
 
   function handleAdd() {
@@ -42,13 +45,30 @@ export function Header({ total, onAddItem }: HeaderProps) {
           onSubmitEditing={handleAdd}
           returnKeyType="done"
         />
-        <TouchableOpacity
-          onPress={handleAdd}
-          activeOpacity={0.85}
-          className="w-12 h-12 bg-white/20 rounded-xl justify-center items-center border border-white/35"
-        >
-          <Text className="text-white text-3xl font-light leading-8">+</Text>
-        </TouchableOpacity>
+        <View className="flex-row gap-2">
+          <TouchableOpacity
+            onPress={onSave}
+            activeOpacity={0.85}
+            className="w-12 h-12 bg-white/20 rounded-xl justify-center items-center border border-white/35"
+          >
+            <FloppyDiskIcon size={20} color="white" weight="fill" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={handleAdd}
+            activeOpacity={0.85}
+            className="w-12 h-12 bg-white/20 rounded-xl justify-center items-center border border-white/35"
+          >
+            <Text className="text-white text-3xl font-light leading-8">+</Text>
+          </TouchableOpacity>
+          <Tooltip content="Você pode arrastar itens para apagar e importar listas completas pela aba de importação.">
+            <TouchableOpacity
+              activeOpacity={0.85}
+              className="w-12 h-12 bg-white/20 rounded-xl justify-center items-center border border-white/35"
+            >
+              <Text className="text-white text-lg font-bold">i</Text>
+            </TouchableOpacity>
+          </Tooltip>
+        </View>
       </View>
     </LinearGradient>
   );

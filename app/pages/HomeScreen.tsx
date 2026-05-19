@@ -6,12 +6,12 @@ import { useShopping } from "../hooks/useShopping";
 
 // Project convention: prefer named functions in app/pages and app/components.
 export function HomeScreen() {
-  const { list, addItem, updateItem, removeItem, getTotal } = useShopping();
+  const { list, addItem, updateItem, removeItem, saveCurrentList, getTotal } = useShopping();
 
   return (
     <SafeAreaView className="flex-1 bg-gray-900">
       <StatusBar barStyle="default" backgroundColor="#3B82F6" />
-      <Header total={getTotal()} onAddItem={addItem} />
+      <Header total={getTotal()} onAddItem={addItem} onSave={saveCurrentList} />
       <ShoppingList
         items={list.items}
         onUpdateItem={updateItem}

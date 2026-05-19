@@ -1,5 +1,6 @@
-import React, { ReactNode, useState } from 'react';
-import { Modal, Pressable, Text, View, useWindowDimensions } from 'react-native';
+import React, { ReactNode } from 'react';
+import { Text } from 'react-native';
+import * as TooltipPrimitive from '@rn-primitives/tooltip';
 
 interface TooltipProps {
   content: string;
@@ -7,23 +8,22 @@ interface TooltipProps {
 }
 
 export function Tooltip({ content, children }: TooltipProps) {
-  const [open, setOpen] = useState(false);
-  const { width } = useWindowDimensions();
-
   return (
-    <>
-      <Pressable onPress={() => setOpen(true)}>{children}</Pressable>
-      <Modal transparent visible={open} animationType="fade" onRequestClose={() => setOpen(false)}>
-        <Pressable className="flex-1 bg-black/40 px-5 justify-center items-center" onPress={() => setOpen(false)}>
-          <Pressable
-            onPress={(event) => event.stopPropagation()}
-            className="rounded-2xl border border-gray-700 bg-gray-900 px-4 py-3"
-            style={{ maxWidth: Math.min(width - 40, 320) }}
-          >
-            <Text className="text-white text-sm leading-5">{content}</Text>
-          </Pressable>
-        </Pressable>
-      </Modal>
-    </>
+    <TooltipPrimitive.Root>
+      <TooltipPrimitive.Trigger asChild>{children}</TooltipPrimitive.Trigger>
+      <TooltipPrimitive.Portal hostName="app-tooltip-host">
+        <TooltipPrimitive.Overlay
+          closeOnPress
+          className="absolute inset-0 bg-black/40"
+        />
+        <TooltipPrimitive.Content
+          side="bottom"
+          sideOffset={8}
+          className="rounded-2xl border border-gray-700 bg-gray-900 px-4 py-3 max-w-80"
+        >
+          <Text className="text-white text-sm leading-5">{content}</Text>
+        </TooltipPrimitive.Content>
+      </TooltipPrimitive.Portal>
+    </TooltipPrimitive.Root>
   );
 }

@@ -8,6 +8,7 @@ interface ShoppingContextType {
   addItems: (names: string[]) => void;
   updateItem: (id: string, updates: Partial<ShoppingItem>) => void;
   removeItem: (id: string) => void;
+  saveCurrentList: () => void;
   getTotal: () => number;
 }
 
@@ -108,13 +109,17 @@ export const ShoppingProvider: React.FC<ShoppingProviderProps> = ({ children }) 
     });
   }, [calculateTotal]);
 
+  const saveCurrentList = useCallback(() => {
+    saveShoppingList(list);
+  }, [list]);
+
   const getTotal = useCallback(() => {
     return list.total;
   }, [list.total]);
 
   return (
     <ShoppingContext.Provider
-      value={{ list, addItem, addItems, updateItem, removeItem, getTotal }}
+      value={{ list, addItem, addItems, updateItem, removeItem, saveCurrentList, getTotal }}
     >
       {children}
     </ShoppingContext.Provider>
