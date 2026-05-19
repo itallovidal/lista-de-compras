@@ -1,13 +1,11 @@
 import React from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  LayoutChangeEvent,
-} from "react-native";
+import { View, Text, TouchableOpacity, LayoutChangeEvent } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   Extrapolation,
+  FadeInUp,
+  FadeOut,
+  LinearTransition,
   interpolate,
   runOnJS,
   useAnimatedStyle,
@@ -105,13 +103,27 @@ export function ItemCard({
   });
 
   const cardStyle = useAnimatedStyle(function cardStyle() {
+    const opacity = interpolate(
+      Math.abs(translateX.value),
+      [0, SWIPE_DELETE_THRESHOLD],
+      [1, 0.05],
+      Extrapolation.CLAMP,
+    );
+
     return {
+      opacity,
       transform: [{ translateX: translateX.value }],
     };
   });
 
   return (
-    <View className="relative mb-2.5" onLayout={handleLayout}>
+    <Animated.View
+      className="relative mb-2.5"
+      entering={FadeInUp.duration(200)}
+      exiting={FadeOut.duration(120)}
+      layout={LinearTransition.duration(180)}
+      onLayout={handleLayout}
+    >
       <Animated.View
         pointerEvents="none"
         style={actionStyle}
@@ -133,15 +145,7 @@ export function ItemCard({
             {item.name}
           </Text>
 
-          <View className="p-1 h-full flex-row justify-center items-center border rounded-2xl bg-gray-600">
-            <TouchableOpacity onPress={increaseQuantity} activeOpacity={0.7} className="p-4">
-              <CaretUpIcon size={14} color="white" weight="regular" />
-            </TouchableOpacity>
-
-            <Text className="text-white text-sm font-bold min-w-5 text-center">
-              {item.quantity}
-            </Text>
-
+          <View className="p-1 h-full flex-row justify-center items-center border border-gray-800 rounded-2xl bg-gray-900">
             <TouchableOpacity
               onPress={decreaseQuantity}
               className={`p-4 ${isMinQty ? "opacity-30" : "opacity-100"}`}
@@ -149,10 +153,22 @@ export function ItemCard({
             >
               <CaretDownIcon size={14} color="white" weight="regular" />
             </TouchableOpacity>
+
+            <Text className="text-white text-sm font-bold min-w-5 text-center">
+              {item.quantity}
+            </Text>
+
+            <TouchableOpacity
+              onPress={increaseQuantity}
+              activeOpacity={0.7}
+              className="p-4"
+            >
+              <CaretUpIcon size={14} color="white" weight="regular" />
+            </TouchableOpacity>
           </View>
 
           <Input
-            className="max-w-24 w-full bg-gray-600 border-gray-500 text-center px-4"
+            className="max-w-24 w-full bg-gray-900 border-gray-800 text-center px-4"
             value={item.price > 0 ? item.price.toString() : ""}
             onChangeText={handlePriceChange}
             keyboardType="numeric"
@@ -161,6 +177,6 @@ export function ItemCard({
           />
         </Animated.View>
       </GestureDetector>
-    </View>
+    </Animated.View>
   );
 }
