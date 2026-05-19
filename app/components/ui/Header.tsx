@@ -12,7 +12,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../lib/Dialog";
-import { FloppyDiskBackIcon } from "phosphor-react-native";
+import { ArrowArcLeftIcon, FloppyDiskBackIcon } from "phosphor-react-native";
+import { Separator } from "../lib/separator";
+import { ArrowLeftIcon } from "lucide-react-native";
 
 const SUGGESTION_CATALOG = [
   {
@@ -63,10 +65,15 @@ export function Header({
   const [marketName, setMarketName] = useState("");
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [suggestionOpen, setSuggestionOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<SuggestionCategoryName | null>(null);
-  const [selectedProducts, setSelectedProducts] = useState<SuggestedSelection[]>([]);
+  const [selectedCategory, setSelectedCategory] =
+    useState<SuggestionCategoryName | null>(null);
+  const [selectedProducts, setSelectedProducts] = useState<
+    SuggestedSelection[]
+  >([]);
 
-  const activeCategory = SUGGESTION_CATALOG.find((category) => category.name === selectedCategory) ?? null;
+  const activeCategory =
+    SUGGESTION_CATALOG.find((category) => category.name === selectedCategory) ??
+    null;
   const selectedCount = selectedProducts.length;
 
   function handleAdd() {
@@ -109,10 +116,14 @@ export function Header({
 
   function handleToggleProduct(category: SuggestionCategoryName, name: string) {
     setSelectedProducts((current) => {
-      const isSelected = current.some((item) => item.category === category && item.name === name);
+      const isSelected = current.some(
+        (item) => item.category === category && item.name === name,
+      );
 
       if (isSelected) {
-        return current.filter((item) => !(item.category === category && item.name === name));
+        return current.filter(
+          (item) => !(item.category === category && item.name === name),
+        );
       }
 
       return [...current, { category, name }];
@@ -162,16 +173,16 @@ export function Header({
               <TouchableOpacity
                 onPress={openFinalizeDialog}
                 activeOpacity={0.85}
-                className="w-12 h-12 bg-white/20 rounded-xl justify-center items-center border border-white/35"
+                className="w-12 h-12 bg-white/20 rounded-md justify-center items-center border border-white/35"
               >
                 <FloppyDiskBackIcon size={20} color="white" weight="fill" />
               </TouchableOpacity>
               <Tooltip content="Você pode arrastar itens para apagar e importar listas completas pela aba de importação.">
                 <TouchableOpacity
                   activeOpacity={0.85}
-                  className="w-12 h-12 bg-white/20 rounded-xl justify-center items-center border border-white/35"
+                  className="w-12 h-12 bg-white/20 rounded-md justify-center items-center border border-white/35"
                 >
-                  <Text className="text-white text-lg font-bold">i</Text>
+                  <Text className="text-white text-md font-bold">i</Text>
                 </TouchableOpacity>
               </Tooltip>
             </View>
@@ -195,7 +206,7 @@ export function Header({
 
         <View className="flex-row items-center gap-2.5 h-12">
           <Input
-            className="flex-1 border-white/35 bg-white/20 text-white h-full"
+            className="flex-1 rounded-md border-white/35 bg-white/20 text-white h-full"
             value={inputValue}
             onChangeText={setInputValue}
             placeholder="Nome do item..."
@@ -206,7 +217,7 @@ export function Header({
           <TouchableOpacity
             onPress={handleAdd}
             activeOpacity={0.85}
-            className="w-12 h-full bg-white/20 rounded-xl justify-center items-center border border-white/35"
+            className="w-12 h-full bg-white/20 rounded-md justify-center items-center border border-white/35"
           >
             <Text className="text-white text-3xl font-light leading-8">+</Text>
           </TouchableOpacity>
@@ -214,56 +225,47 @@ export function Header({
       </LinearGradient>
 
       <Dialog open={suggestionOpen} onOpenChange={handleSuggestionOpenChange}>
-        <DialogContent>
+        <DialogContent className="rounded-lg">
           <DialogHeader>
             <DialogTitle>Adicionar por sugestões</DialogTitle>
             <DialogDescription>
-              Escolha uma categoria, selecione vários produtos e confirme para adicionar tudo de uma vez.
+              Escolha uma categoria, selecione vários produtos e confirme para
+              adicionar tudo de uma vez.
             </DialogDescription>
           </DialogHeader>
 
           <View className="gap-4">
-            {selectedCount > 0 ? (
-              <View className="rounded-2xl border border-blue-400/30 bg-blue-500/10 px-4 py-3 gap-2">
-                <Text className="text-white font-semibold">
-                  {selectedCount} item(ns) selecionado(s)
-                </Text>
-                <View className="flex-row flex-wrap gap-2">
-                  {selectedProducts.map((item) => (
-                    <View
-                      key={`${item.category}:${item.name}`}
-                      className="rounded-full bg-blue-500/20 border border-blue-400/30 px-3 py-1"
-                    >
-                      <Text className="text-white text-xs font-semibold">{item.name}</Text>
-                    </View>
-                  ))}
-                </View>
-              </View>
-            ) : null}
-
             {selectedCategory ? (
               <View className="gap-3">
                 <View className="flex-row items-center justify-between gap-3">
                   <TouchableOpacity
                     onPress={handleBackToCategories}
                     activeOpacity={0.85}
-                    className="rounded-xl bg-gray-800 px-3 py-2"
+                    className="px-3 py-2"
                   >
-                    <Text className="text-white font-semibold">Voltar</Text>
+                    <Text className="text-white font-semibold text-center">
+                      <ArrowLeftIcon color={"white"} />
+                    </Text>
                   </TouchableOpacity>
-                  <Text className="text-white font-semibold">{selectedCategory}</Text>
+                  <Text className="text-white font-semibold text-center">
+                    {selectedCategory}
+                  </Text>
                 </View>
 
                 <View className="flex-row flex-wrap gap-2">
                   {activeCategory?.products.map((product) => {
                     const isSelected = selectedProducts.some(
-                      (item) => item.category === selectedCategory && item.name === product
+                      (item) =>
+                        item.category === selectedCategory &&
+                        item.name === product,
                     );
 
                     return (
                       <TouchableOpacity
                         key={`${selectedCategory}-${product}`}
-                        onPress={() => handleToggleProduct(selectedCategory, product)}
+                        onPress={() =>
+                          handleToggleProduct(selectedCategory, product)
+                        }
                         activeOpacity={0.85}
                         className={
                           isSelected
@@ -289,20 +291,24 @@ export function Header({
                     activeOpacity={0.85}
                     className="rounded-full border border-white/20 bg-white/10 px-4 py-3"
                   >
-                    <Text className="text-white font-semibold">{category.name}</Text>
+                    <Text className="text-white font-semibold">
+                      {category.name}
+                    </Text>
                   </TouchableOpacity>
                 ))}
               </View>
             )}
           </View>
 
-          <DialogFooter>
+          <DialogFooter className="mt-4">
             <TouchableOpacity
               onPress={() => handleSuggestionOpenChange(false)}
               activeOpacity={0.85}
-              className="rounded-2xl bg-gray-800 px-4 py-3"
+              className="rounded-md bg-gray-800 px-4 py-3 "
             >
-              <Text className="text-white font-semibold">Cancelar</Text>
+              <Text className="text-white font-semibold text-center">
+                Cancelar
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={handleConfirmSuggestions}
@@ -310,11 +316,11 @@ export function Header({
               disabled={selectedCount === 0}
               className={
                 selectedCount === 0
-                  ? "rounded-2xl bg-blue-500/40 px-4 py-3"
-                  : "rounded-2xl bg-blue-500 px-4 py-3"
+                  ? "rounded-md bg-blue-500/40 px-4 py-3 text-center"
+                  : "rounded-md bg-blue-500 px-4 py-3 text-center"
               }
             >
-              <Text className="text-white font-semibold">
+              <Text className="text-white font-semibold text-center">
                 Adicionar {selectedCount}
               </Text>
             </TouchableOpacity>
@@ -323,27 +329,30 @@ export function Header({
       </Dialog>
 
       <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-        <DialogContent>
+        <DialogContent className="rounded-lg">
           <DialogHeader>
             <DialogTitle>Finalizar compra</DialogTitle>
             <DialogDescription>
-              Informe o mercado e escolha se deseja salvar a lista no histórico.
+              Você pode acessar seu histórico a qualquer momento para revisar ou
+              reutilizar suas listas antigas.
             </DialogDescription>
           </DialogHeader>
 
-          <View className="gap-3">
+          <View className="gap-2 flex flex-col items-center">
             <Input
               value={marketName}
               onChangeText={setMarketName}
-              placeholder="Qual mercado foi comprado?"
+              placeholder="Nome do mercado? (opcional)"
               placeholderTextColor="rgba(255,255,255,0.4)"
+              className="bg-gray-800/80 px-4 rounded-md border w-full border-gray-600"
             />
-            <View className="rounded-2xl border border-gray-700 bg-gray-800 px-4 py-3 gap-1">
+
+            <Separator className="max-w-24 my-2" />
+
+            <View className="rounded-md border border-gray-600 bg-gray-700 px-4 py-3 gap-1">
               <Text className="text-white font-semibold">
-                {itemCount} produtos distintos • {totalQuantity} itens totais • {formatCurrency(total)}
-              </Text>
-              <Text className="text-gray-300 text-sm">
-                Essa lista pode ser salva no histórico ou apenas limpa da tela.
+                Total de Produtos: {itemCount} • Total de Itens: {totalQuantity}{" "}
+                • {formatCurrency(total)}
               </Text>
             </View>
           </View>
@@ -352,16 +361,20 @@ export function Header({
             <TouchableOpacity
               onPress={handleDiscard}
               activeOpacity={0.85}
-              className="rounded-2xl bg-gray-800 px-4 py-3"
+              className="rounded-md bg-gray-800 px-4 py-3"
             >
-              <Text className="text-white font-semibold">Não salvar</Text>
+              <Text className="text-white text-center font-semibold">
+                Não salvar
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={handleSave}
               activeOpacity={0.85}
-              className="rounded-2xl bg-blue-500 px-4 py-3"
+              className="rounded-md bg-blue-500 px-4 py-3"
             >
-              <Text className="text-white font-semibold">Salvar</Text>
+              <Text className="text-white text-center font-semibold">
+                Salvar
+              </Text>
             </TouchableOpacity>
           </DialogFooter>
         </DialogContent>

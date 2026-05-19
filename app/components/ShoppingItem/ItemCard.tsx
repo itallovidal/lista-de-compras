@@ -127,7 +127,7 @@ export function ItemCard({
       <Animated.View
         pointerEvents="none"
         style={actionStyle}
-        className="absolute inset-0 rounded-2xl bg-red-600 flex-row items-center justify-end px-5"
+        className="absolute inset-0 rounded-lg bg-red-600 flex-row items-center justify-end px-5"
       >
         <TrashIcon size={22} color="white" weight="regular" />
       </Animated.View>
@@ -135,17 +135,26 @@ export function ItemCard({
       <GestureDetector gesture={panGesture}>
         <Animated.View
           style={cardStyle}
-          className="bg-gray-900 rounded-2xl p-2 flex-row items-center gap-1 border border-gray-800 shadow-black/30 shadow-lg max-h-28"
+          className="bg-gray-900 rounded-lg p-2 flex-row items-center gap-1 border border-gray-800 shadow-black/30 shadow-lg max-h-28"
         >
           <Text
             numberOfLines={1}
             ellipsizeMode="tail"
-            className="flex-1 text-white text-[15px] font-semibold"
+            className="flex-1 text-white text-[15px] font-semibold text-center"
           >
             {item.name}
           </Text>
 
-          <View className="p-1 h-full flex-row justify-center items-center border border-gray-800 rounded-2xl bg-gray-900">
+          <Input
+            className="max-w-24 w-full bg-gray-800/80 border-gray-800/70 rounded-lg text-center px-4"
+            value={item.price > 0 ? item.price.toString() : ""}
+            onChangeText={handlePriceChange}
+            keyboardType="numeric"
+            placeholder="0,00"
+            placeholderTextColor="rgba(255,255,255,0.3)"
+          />
+
+          <View className="p-1 h-full flex-row justify-center items-center rounded-lg border-none bg-gray-800/80">
             <TouchableOpacity
               onPress={decreaseQuantity}
               className={`p-4 ${isMinQty ? "opacity-30" : "opacity-100"}`}
@@ -166,15 +175,6 @@ export function ItemCard({
               <CaretUpIcon size={14} color="white" weight="regular" />
             </TouchableOpacity>
           </View>
-
-          <Input
-            className="max-w-24 w-full bg-gray-900 border-gray-800 text-center px-4"
-            value={item.price > 0 ? item.price.toString() : ""}
-            onChangeText={handlePriceChange}
-            keyboardType="numeric"
-            placeholder="0,00"
-            placeholderTextColor="rgba(255,255,255,0.3)"
-          />
         </Animated.View>
       </GestureDetector>
     </Animated.View>

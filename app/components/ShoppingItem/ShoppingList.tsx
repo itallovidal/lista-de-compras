@@ -18,7 +18,7 @@ export function ShoppingList({
   if (items.length === 0) {
     return (
       <View className="flex-1 justify-center items-center px-4 bg-gray-900 overflow-hidden">
-        <View className="rounded-3xl p-10 items-center w-full border border-gray-800 overflow-hidden">
+        <View className="rounded-3xl p-10 items-center w-full border-2 border-gray-800/70 overflow-hidden">
           <Text className="text-6xl mb-4">🛒</Text>
           <Text className="text-white text-xl font-bold mb-2">Lista vazia</Text>
           <Text className="text-white text-sm text-center leading-5">
