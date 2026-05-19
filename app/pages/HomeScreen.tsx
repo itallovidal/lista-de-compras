@@ -1,11 +1,11 @@
-import React from "react";
 import { View, StatusBar } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Header } from "../components/ui/Header";
 import { ShoppingList } from "../components/ShoppingItem/ShoppingList";
 import { useShopping } from "../hooks/useShopping";
 
-export const HomeScreen: React.FC = () => {
+// Project convention: prefer named functions in app/pages and app/components.
+export function HomeScreen() {
   const { list, addItem, updateItem, removeItem, getTotal } = useShopping();
 
   return (
@@ -19,4 +19,4 @@ export const HomeScreen: React.FC = () => {
       />
     </SafeAreaView>
   );
-};
+}

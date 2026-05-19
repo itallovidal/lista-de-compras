@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { formatCurrency } from "../../lib/formatCurrency";
@@ -9,15 +9,15 @@ interface HeaderProps {
   onAddItem: (name: string) => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ total, onAddItem }) => {
+export function Header({ total, onAddItem }: HeaderProps) {
   const [inputValue, setInputValue] = useState("");
 
-  const handleAdd = () => {
+  function handleAdd() {
     if (inputValue.trim()) {
       onAddItem(inputValue.trim());
       setInputValue("");
     }
-  };
+  }
 
   return (
     <LinearGradient
@@ -52,4 +52,4 @@ export const Header: React.FC<HeaderProps> = ({ total, onAddItem }) => {
       </View>
     </LinearGradient>
   );
-};
+}

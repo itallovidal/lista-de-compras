@@ -28,32 +28,46 @@ interface ItemCardProps {
 const DELETE_ACTION_WIDTH = 92;
 const SWIPE_DELETE_THRESHOLD = 80;
 
-export const ItemCard: React.FC<ItemCardProps> = ({
+export function ItemCard({
   item,
   onUpdatePrice,
   onUpdateQuantity,
   onRemove,
-}) => {
+}: ItemCardProps) {
   const isMinQty = item.quantity <= 1;
   const translateX = useSharedValue(0);
   const cardWidth = useSharedValue(0);
 
-  const handleLayout = (event: LayoutChangeEvent) => {
+  function handleLayout(event: LayoutChangeEvent) {
     cardWidth.value = event.nativeEvent.layout.width;
-  };
+  }
 
-  const resetCard = () => {
+  function resetCard() {
     translateX.value = withSpring(0, { damping: 18, stiffness: 180 });
-  };
+  }
 
-  const removeItem = () => {
+  function removeItem() {
     onRemove();
-  };
+  }
+
+  function increaseQuantity() {
+    onUpdateQuantity(item.quantity + 1);
+  }
+
+  function decreaseQuantity() {
+    if (!isMinQty) {
+      onUpdateQuantity(item.quantity - 1);
+    }
+  }
+
+  function handlePriceChange(text: string) {
+    onUpdatePrice(parseFloat(text) || 0);
+  }
 
   const panGesture = Gesture.Pan()
     .activeOffsetX([-8, 8])
     .failOffsetY([-4, 4])
-    .onUpdate((event) => {
+    .onUpdate(function handlePanUpdate(event) {
       if (Math.abs(event.translationY) > Math.abs(event.translationX)) {
         return;
       }
@@ -64,7 +78,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({
       );
       translateX.value = nextX;
     })
-    .onEnd(() => {
+    .onEnd(function handlePanEnd() {
       if (translateX.value <= -SWIPE_DELETE_THRESHOLD) {
         translateX.value = withSpring(-cardWidth.value, {
           damping: 20,
@@ -77,7 +91,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({
       runOnJS(resetCard)();
     });
 
-  const actionStyle = useAnimatedStyle(() => {
+  const actionStyle = useAnimatedStyle(function actionStyle() {
     const opacity = interpolate(
       Math.abs(translateX.value),
       [0, DELETE_ACTION_WIDTH],
@@ -90,9 +104,11 @@ export const ItemCard: React.FC<ItemCardProps> = ({
     };
   });
 
-  const cardStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: translateX.value }],
-  }));
+  const cardStyle = useAnimatedStyle(function cardStyle() {
+    return {
+      transform: [{ translateX: translateX.value }],
+    };
+  });
 
   return (
     <View className="relative mb-2.5" onLayout={handleLayout}>
@@ -118,11 +134,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({
           </Text>
 
           <View className="p-1 h-full flex-row justify-center items-center border rounded-2xl bg-gray-600">
-            <TouchableOpacity
-              onPress={() => onUpdateQuantity(item.quantity + 1)}
-              activeOpacity={0.7}
-              className="p-4"
-            >
+            <TouchableOpacity onPress={increaseQuantity} activeOpacity={0.7} className="p-4">
               <CaretUpIcon size={14} color="white" weight="regular" />
             </TouchableOpacity>
 
@@ -131,7 +143,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({
             </Text>
 
             <TouchableOpacity
-              onPress={() => !isMinQty && onUpdateQuantity(item.quantity - 1)}
+              onPress={decreaseQuantity}
               className={`p-4 ${isMinQty ? "opacity-30" : "opacity-100"}`}
               activeOpacity={isMinQty ? 1 : 0.7}
             >
@@ -142,7 +154,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({
           <Input
             className="max-w-24 w-full bg-gray-600 border-gray-500 text-center px-4"
             value={item.price > 0 ? item.price.toString() : ""}
-            onChangeText={(text) => onUpdatePrice(parseFloat(text) || 0)}
+            onChangeText={handlePriceChange}
             keyboardType="numeric"
             placeholder="0,00"
             placeholderTextColor="rgba(255,255,255,0.3)"
@@ -151,4 +163,4 @@ export const ItemCard: React.FC<ItemCardProps> = ({
       </GestureDetector>
     </View>
   );
-};
+}

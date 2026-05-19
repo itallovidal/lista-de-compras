@@ -10,11 +10,11 @@ interface ShoppingListProps {
   onRemoveItem: (id: string) => void;
 }
 
-export const ShoppingList: React.FC<ShoppingListProps> = ({
+export function ShoppingList({
   items,
   onUpdateItem,
   onRemoveItem,
-}) => {
+}: ShoppingListProps) {
   if (items.length === 0) {
     return (
       <View className="flex-1 justify-center items-center px-4 bg-gray-900 overflow-hidden">
@@ -29,20 +29,36 @@ export const ShoppingList: React.FC<ShoppingListProps> = ({
     );
   }
 
+  function renderItemCard(item: ShoppingItemType) {
+    function handleUpdatePrice(price: number) {
+      onUpdateItem(item.id, { price });
+    }
+
+    function handleUpdateQuantity(quantity: number) {
+      onUpdateItem(item.id, { quantity });
+    }
+
+    function handleRemove() {
+      onRemoveItem(item.id);
+    }
+
+    return (
+      <ItemCard
+        key={item.id}
+        item={item}
+        onUpdatePrice={handleUpdatePrice}
+        onUpdateQuantity={handleUpdateQuantity}
+        onRemove={handleRemove}
+      />
+    );
+  }
+
   return (
     <ScrollView
       className="flex-1 py-4 bg-gray-900 mx-2"
       showsVerticalScrollIndicator={false}
     >
-      {items.map((item) => (
-        <ItemCard
-          key={item.id}
-          item={item}
-          onUpdatePrice={(price) => onUpdateItem(item.id, { price })}
-          onUpdateQuantity={(quantity) => onUpdateItem(item.id, { quantity })}
-          onRemove={() => onRemoveItem(item.id)}
-        />
-      ))}
+      {items.map(renderItemCard)}
     </ScrollView>
   );
-};
+}

@@ -10,31 +10,39 @@ import {
   parseImportedItems,
 } from "../lib/importItems";
 
-export const ImportScreen: React.FC = () => {
+export function ImportScreen() {
   const { addItems } = useShopping();
   const [value, setValue] = useState("");
   const [confirmOpen, setConfirmOpen] = useState(false);
 
-  const items = useMemo(() => parseImportedItems(value), [value]);
+  function getImportedItems() {
+    return parseImportedItems(value);
+  }
+
+  const items = useMemo(getImportedItems, [value]);
 
   const hasInvalidFormat =
     value.trim().length > 0 && !hasValidMultilineFormat(value);
 
-  const handleImport = () => {
+  function handleImport() {
     if (!hasValidMultilineFormat(value)) {
       Alert.alert("Formato inválido", "Cole a lista com um item por linha.");
       return;
     }
 
     setConfirmOpen(true);
-  };
+  }
 
-  const confirmImport = () => {
+  function confirmImport() {
     addItems(items);
     setValue("");
     setConfirmOpen(false);
     Alert.alert("Importado", `${items.length} item(ns) importado(s).`);
-  };
+  }
+
+  function handleCancelImport() {
+    setConfirmOpen(false);
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-gray-900 px-4 py-4">
@@ -86,8 +94,8 @@ export const ImportScreen: React.FC = () => {
         confirmLabel="Importar"
         cancelLabel="Cancelar"
         onConfirm={confirmImport}
-        onCancel={() => setConfirmOpen(false)}
+        onCancel={handleCancelImport}
       />
     </SafeAreaView>
   );
-};
+}
