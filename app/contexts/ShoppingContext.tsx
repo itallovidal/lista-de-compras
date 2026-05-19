@@ -5,6 +5,7 @@ import {
   loadShoppingList,
   saveShoppingList,
 } from '../lib/storage';
+import { resolveMarketName } from '../lib/marketName';
 
 interface ShoppingContextType {
   list: ShoppingList;
@@ -124,14 +125,13 @@ export const ShoppingProvider: React.FC<ShoppingProviderProps> = ({ children }) 
   }, []);
 
   const saveCurrentList = useCallback(async (marketName: string) => {
-    const trimmedMarketName = marketName.trim();
-    if (!trimmedMarketName || list.items.length === 0) {
+    if (list.items.length === 0) {
       return;
     }
 
     const historyEntry: ShoppingHistoryEntry = {
       id: Date.now().toString(),
-      marketName: trimmedMarketName,
+      marketName: resolveMarketName(marketName),
       items: list.items,
       total: list.total,
       itemCount: list.items.length,
