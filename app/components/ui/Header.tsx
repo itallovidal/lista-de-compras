@@ -165,7 +165,7 @@ export function Header({
           </View>
         </View>
 
-        <View className="flex-row items-center gap-2.5 h-12">
+        <View className="flex-row items-center gap-2.5 h-14">
           <Input
             className="flex-1 rounded-md border-white/35 bg-white/20 text-white h-full"
             value={inputValue}
@@ -184,7 +184,7 @@ export function Header({
           </TouchableOpacity>
         </View>
 
-        <View className="mt-3 flex-row items-center justify-between gap-2 ">
+        <View className="mt-2.5 flex-row items-center justify-between gap-2 ">
           <View className="flex-row gap-2">
             <View className="rounded-full bg-white/15 border border-white/20 px-3 py-1">
               <Text className="text-white text-sm font-semibold">
