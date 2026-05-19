@@ -4,11 +4,11 @@
     "slug": "lista-compras",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/custom/appicon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/custom/splashimage.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,12 +17,18 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/custom/adaptativeicon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.ividalll.listacompras"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "1db3f62d-f417-4b8f-ba43-005da472457b"
+      }
     }
   }
 }
