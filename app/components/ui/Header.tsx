@@ -14,11 +14,38 @@ import {
 } from "../lib/Dialog";
 import { FloppyDiskBackIcon } from "phosphor-react-native";
 
+const SUGGESTION_CATALOG = [
+  {
+    name: "Limpeza",
+    products: ["Detergente", "Desinfetante", "Sabão em pó"],
+  },
+  {
+    name: "Higiene",
+    products: ["Sabonete", "Shampoo", "Papel higiênico"],
+  },
+  {
+    name: "Bebidas",
+    products: ["Água", "Refrigerante", "Cerveja"],
+  },
+  {
+    name: "Frios",
+    products: ["Queijo", "Presunto", "Mortadela"],
+  },
+] as const;
+
+type SuggestionCategoryName = (typeof SUGGESTION_CATALOG)[number]["name"];
+
+interface SuggestedSelection {
+  category: SuggestionCategoryName;
+  name: string;
+}
+
 interface HeaderProps {
   total: number;
   itemCount: number;
   totalQuantity: number;
   onAddItem: (name: string) => void;
+  onAddItems: (names: string[]) => void;
   onSave: (marketName: string) => Promise<void>;
   onClear: () => void;
 }
@@ -28,23 +55,79 @@ export function Header({
   itemCount,
   totalQuantity,
   onAddItem,
+  onAddItems,
   onSave,
   onClear,
 }: HeaderProps) {
   const [inputValue, setInputValue] = useState("");
   const [marketName, setMarketName] = useState("");
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [suggestionOpen, setSuggestionOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<SuggestionCategoryName | null>(null);
+  const [selectedProducts, setSelectedProducts] = useState<SuggestedSelection[]>([]);
+
+  const activeCategory = SUGGESTION_CATALOG.find((category) => category.name === selectedCategory) ?? null;
+  const selectedCount = selectedProducts.length;
 
   function handleAdd() {
-    if (inputValue.trim()) {
-      onAddItem(inputValue.trim());
+    const trimmedValue = inputValue.trim();
+
+    if (trimmedValue) {
+      onAddItem(trimmedValue);
       setInputValue("");
+      return;
     }
+
+    setSuggestionOpen(true);
   }
 
   function openFinalizeDialog() {
     setMarketName("");
     setConfirmOpen(true);
+  }
+
+  function resetSuggestionState() {
+    setSelectedCategory(null);
+    setSelectedProducts([]);
+  }
+
+  function handleSuggestionOpenChange(nextOpen: boolean) {
+    setSuggestionOpen(nextOpen);
+
+    if (!nextOpen) {
+      resetSuggestionState();
+    }
+  }
+
+  function handleSelectCategory(category: SuggestionCategoryName) {
+    setSelectedCategory(category);
+  }
+
+  function handleBackToCategories() {
+    setSelectedCategory(null);
+  }
+
+  function handleToggleProduct(category: SuggestionCategoryName, name: string) {
+    setSelectedProducts((current) => {
+      const isSelected = current.some((item) => item.category === category && item.name === name);
+
+      if (isSelected) {
+        return current.filter((item) => !(item.category === category && item.name === name));
+      }
+
+      return [...current, { category, name }];
+    });
+  }
+
+  function handleConfirmSuggestions() {
+    if (selectedProducts.length === 0) {
+      return;
+    }
+
+    onAddItems(selectedProducts.map((item) => item.name));
+    setInputValue("");
+    setSuggestionOpen(false);
+    resetSuggestionState();
   }
 
   async function handleSave() {
@@ -129,6 +212,115 @@ export function Header({
           </TouchableOpacity>
         </View>
       </LinearGradient>
+
+      <Dialog open={suggestionOpen} onOpenChange={handleSuggestionOpenChange}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Adicionar por sugestões</DialogTitle>
+            <DialogDescription>
+              Escolha uma categoria, selecione vários produtos e confirme para adicionar tudo de uma vez.
+            </DialogDescription>
+          </DialogHeader>
+
+          <View className="gap-4">
+            {selectedCount > 0 ? (
+              <View className="rounded-2xl border border-blue-400/30 bg-blue-500/10 px-4 py-3 gap-2">
+                <Text className="text-white font-semibold">
+                  {selectedCount} item(ns) selecionado(s)
+                </Text>
+                <View className="flex-row flex-wrap gap-2">
+                  {selectedProducts.map((item) => (
+                    <View
+                      key={`${item.category}:${item.name}`}
+                      className="rounded-full bg-blue-500/20 border border-blue-400/30 px-3 py-1"
+                    >
+                      <Text className="text-white text-xs font-semibold">{item.name}</Text>
+                    </View>
+                  ))}
+                </View>
+              </View>
+            ) : null}
+
+            {selectedCategory ? (
+              <View className="gap-3">
+                <View className="flex-row items-center justify-between gap-3">
+                  <TouchableOpacity
+                    onPress={handleBackToCategories}
+                    activeOpacity={0.85}
+                    className="rounded-xl bg-gray-800 px-3 py-2"
+                  >
+                    <Text className="text-white font-semibold">Voltar</Text>
+                  </TouchableOpacity>
+                  <Text className="text-white font-semibold">{selectedCategory}</Text>
+                </View>
+
+                <View className="flex-row flex-wrap gap-2">
+                  {activeCategory?.products.map((product) => {
+                    const isSelected = selectedProducts.some(
+                      (item) => item.category === selectedCategory && item.name === product
+                    );
+
+                    return (
+                      <TouchableOpacity
+                        key={`${selectedCategory}-${product}`}
+                        onPress={() => handleToggleProduct(selectedCategory, product)}
+                        activeOpacity={0.85}
+                        className={
+                          isSelected
+                            ? "rounded-full border border-blue-300 bg-blue-500/30 px-4 py-3"
+                            : "rounded-full border border-gray-700 bg-gray-800 px-4 py-3"
+                        }
+                      >
+                        <Text className="text-white font-semibold">
+                          {isSelected ? "✓ " : ""}
+                          {product}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+              </View>
+            ) : (
+              <View className="flex-row flex-wrap gap-2">
+                {SUGGESTION_CATALOG.map((category) => (
+                  <TouchableOpacity
+                    key={category.name}
+                    onPress={() => handleSelectCategory(category.name)}
+                    activeOpacity={0.85}
+                    className="rounded-full border border-white/20 bg-white/10 px-4 py-3"
+                  >
+                    <Text className="text-white font-semibold">{category.name}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
+          </View>
+
+          <DialogFooter>
+            <TouchableOpacity
+              onPress={() => handleSuggestionOpenChange(false)}
+              activeOpacity={0.85}
+              className="rounded-2xl bg-gray-800 px-4 py-3"
+            >
+              <Text className="text-white font-semibold">Cancelar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={handleConfirmSuggestions}
+              activeOpacity={0.85}
+              disabled={selectedCount === 0}
+              className={
+                selectedCount === 0
+                  ? "rounded-2xl bg-blue-500/40 px-4 py-3"
+                  : "rounded-2xl bg-blue-500 px-4 py-3"
+              }
+            >
+              <Text className="text-white font-semibold">
+                Adicionar {selectedCount}
+              </Text>
+            </TouchableOpacity>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
         <DialogContent>

@@ -6,7 +6,7 @@ import { useShopping } from "../hooks/useShopping";
 
 // Project convention: prefer named functions in app/pages and app/components.
 export function HomeScreen() {
-  const { list, addItem, updateItem, removeItem, saveCurrentList, clearCurrentList, getTotal } = useShopping();
+  const { list, addItem, addItems, updateItem, removeItem, saveCurrentList, clearCurrentList, getTotal } = useShopping();
   const totalQuantity = list.items.reduce((sum, item) => sum + (item.quantity || 1), 0);
 
   return (
@@ -17,6 +17,7 @@ export function HomeScreen() {
         itemCount={list.items.length}
         totalQuantity={totalQuantity}
         onAddItem={addItem}
+        onAddItems={addItems}
         onSave={saveCurrentList}
         onClear={clearCurrentList}
       />
