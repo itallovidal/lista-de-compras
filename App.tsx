@@ -1,15 +1,24 @@
-import { StatusBar } from 'expo-status-bar'
-import { View } from 'react-native'
-import { AppRoutes } from './src/routes/appRoutes'
-import { NavigationContainer } from '@react-navigation/native'
+import "./global.css";
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { ShoppingProvider } from "./app/contexts/ShoppingContext";
+import { TabNavigator } from "./app/navigation/TabNavigator";
+import { PortalHost } from "@rn-primitives/portal";
 
 export default function App() {
   return (
-    <View className={'bg-gray-700 flex-1 pt-12'}>
-      <StatusBar translucent style={'light'} />
-      <NavigationContainer>
-        <AppRoutes />
-      </NavigationContainer>
-    </View>
-  )
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <ShoppingProvider>
+          <NavigationContainer>
+            <TabNavigator />
+            <PortalHost />
+            <PortalHost name="app-tooltip-host" />
+          </NavigationContainer>
+        </ShoppingProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
+  );
 }
