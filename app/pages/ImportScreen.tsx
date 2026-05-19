@@ -2,8 +2,15 @@ import React, { useMemo, useState } from "react";
 import { View, Text, TouchableOpacity, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useShopping } from "../hooks/useShopping";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../components/lib/Dialog";
 import { TextArea } from "../components/lib/TextArea";
-import { Dialog } from "../components/lib/Dialog";
 import { Tooltip } from "../components/lib/Tooltip";
 import {
   hasValidMultilineFormat,
@@ -87,15 +94,33 @@ export function ImportScreen() {
         </View>
       </View>
 
-      <Dialog
-        open={confirmOpen}
-        title="Confirmar importação"
-        description={`Importar ${items.length} item(ns) da lista colada?`}
-        confirmLabel="Importar"
-        cancelLabel="Cancelar"
-        onConfirm={confirmImport}
-        onCancel={handleCancelImport}
-      />
+      <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirmar importação</DialogTitle>
+            <DialogDescription>
+              Importar {items.length} item(ns) da lista colada?
+            </DialogDescription>
+          </DialogHeader>
+
+          <DialogFooter>
+            <TouchableOpacity
+              onPress={handleCancelImport}
+              activeOpacity={0.85}
+              className="rounded-2xl bg-gray-800 px-4 py-3"
+            >
+              <Text className="text-white font-semibold">Cancelar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={confirmImport}
+              activeOpacity={0.85}
+              className="rounded-2xl bg-blue-500 px-4 py-3"
+            >
+              <Text className="text-white font-semibold">Importar</Text>
+            </TouchableOpacity>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </SafeAreaView>
   );
 }

@@ -1,6 +1,10 @@
 import React, { createContext, useState, useCallback, useEffect, ReactNode } from 'react';
-import { ShoppingItem, ShoppingList } from '../types/shopping';
-import { saveShoppingList, loadShoppingList } from '../lib/storage';
+import { ShoppingHistoryEntry, ShoppingItem, ShoppingList } from '../types/shopping';
+import {
+  addShoppingHistoryEntry,
+  loadShoppingList,
+  saveShoppingList,
+} from '../lib/storage';
 
 interface ShoppingContextType {
   list: ShoppingList;
@@ -8,7 +12,8 @@ interface ShoppingContextType {
   addItems: (names: string[]) => void;
   updateItem: (id: string, updates: Partial<ShoppingItem>) => void;
   removeItem: (id: string) => void;
-  saveCurrentList: () => void;
+  saveCurrentList: (marketName: string) => Promise<void>;
+  clearCurrentList: () => void;
   getTotal: () => number;
 }
 
@@ -109,9 +114,33 @@ export const ShoppingProvider: React.FC<ShoppingProviderProps> = ({ children }) 
     });
   }, [calculateTotal]);
 
-  const saveCurrentList = useCallback(() => {
-    saveShoppingList(list);
-  }, [list]);
+  const clearCurrentList = useCallback(() => {
+    const emptyList = {
+      items: [],
+      total: 0,
+    };
+    setList(emptyList);
+    saveShoppingList(emptyList);
+  }, []);
+
+  const saveCurrentList = useCallback(async (marketName: string) => {
+    const trimmedMarketName = marketName.trim();
+    if (!trimmedMarketName || list.items.length === 0) {
+      return;
+    }
+
+    const historyEntry: ShoppingHistoryEntry = {
+      id: Date.now().toString(),
+      marketName: trimmedMarketName,
+      items: list.items,
+      total: list.total,
+      itemCount: list.items.length,
+      createdAt: new Date().toISOString(),
+    };
+
+    await addShoppingHistoryEntry(historyEntry);
+    clearCurrentList();
+  }, [clearCurrentList, list]);
 
   const getTotal = useCallback(() => {
     return list.total;
@@ -119,7 +148,16 @@ export const ShoppingProvider: React.FC<ShoppingProviderProps> = ({ children }) 
 
   return (
     <ShoppingContext.Provider
-      value={{ list, addItem, addItems, updateItem, removeItem, saveCurrentList, getTotal }}
+      value={{
+        list,
+        addItem,
+        addItems,
+        updateItem,
+        removeItem,
+        saveCurrentList,
+        clearCurrentList,
+        getTotal,
+      }}
     >
       {children}
     </ShoppingContext.Provider>

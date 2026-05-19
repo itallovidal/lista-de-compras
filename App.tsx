@@ -14,6 +14,7 @@ export default function App() {
         <ShoppingProvider>
           <NavigationContainer>
             <TabNavigator />
+            <PortalHost />
             <PortalHost name="app-tooltip-host" />
           </NavigationContainer>
         </ShoppingProvider>
