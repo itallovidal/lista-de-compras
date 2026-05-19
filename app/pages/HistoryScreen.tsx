@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { Pressable, ScrollView, Text, useWindowDimensions, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useFocusEffect } from "@react-navigation/native";
 import {
@@ -24,6 +24,7 @@ function formatDate(value: string) {
 }
 
 export function HistoryScreen() {
+  const { height: windowHeight } = useWindowDimensions();
   const [history, setHistory] = useState<ShoppingHistoryEntry[]>([]);
   const [selectedEntry, setSelectedEntry] =
     useState<ShoppingHistoryEntry | null>(null);
@@ -106,7 +107,11 @@ export function HistoryScreen() {
             </DialogDescription>
           </DialogHeader>
 
-          <View className="gap-2 w-full">
+          <ScrollView
+            style={{ maxHeight: windowHeight * 0.6 }}
+            showsVerticalScrollIndicator={false}
+            contentContainerClassName="gap-2 pb-1"
+          >
             {selectedEntry?.items.map((item) => (
               <View
                 key={item.id}
@@ -123,7 +128,7 @@ export function HistoryScreen() {
                 </View>
               </View>
             ))}
-          </View>
+          </ScrollView>
         </DialogContent>
       </Dialog>
     </SafeAreaView>
