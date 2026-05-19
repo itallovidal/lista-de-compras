@@ -11,6 +11,7 @@ interface ShoppingContextType {
   list: ShoppingList;
   addItem: (name: string) => void;
   addItems: (names: string[]) => void;
+  importItems: (items: ShoppingItem[]) => void;
   updateItem: (id: string, updates: Partial<ShoppingItem>) => void;
   removeItem: (id: string) => void;
   saveCurrentList: (marketName: string) => Promise<void>;
@@ -91,6 +92,26 @@ export const ShoppingProvider: React.FC<ShoppingProviderProps> = ({ children }) 
     });
   }, [calculateTotal]);
 
+  const importItems = useCallback((items: ShoppingItem[]) => {
+    if (items.length === 0) return;
+
+    setList((prev) => {
+      const importedItems: ShoppingItem[] = items.map((item) => ({
+        id: Date.now().toString() + Math.random().toString(36).slice(2),
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+      }));
+      const newItems = [...prev.items, ...importedItems];
+      const newList = {
+        items: newItems,
+        total: calculateTotal(newItems),
+      };
+      saveShoppingList(newList);
+      return newList;
+    });
+  }, [calculateTotal]);
+
   const updateItem = useCallback((id: string, updates: Partial<ShoppingItem>) => {
     setList((prev) => {
       const newItems = prev.items.map((item) =>
@@ -152,6 +173,7 @@ export const ShoppingProvider: React.FC<ShoppingProviderProps> = ({ children }) 
         list,
         addItem,
         addItems,
+        importItems,
         updateItem,
         removeItem,
         saveCurrentList,

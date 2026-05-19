@@ -1,7 +1,9 @@
 import React, { useCallback, useState } from "react";
 import { Pressable, ScrollView, Text, useWindowDimensions, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { ArrowClockwise, ShoppingCart } from "phosphor-react-native";
+import colors from "tailwindcss/colors";
 import {
   Dialog,
   DialogContent,
@@ -12,6 +14,7 @@ import {
 import { formatCurrency } from "../lib/formatCurrency";
 import { ShoppingHistoryEntry } from "../types/shopping";
 import { loadShoppingHistory } from "../lib/storage";
+import { useShopping } from "../hooks/useShopping";
 
 function formatDate(value: string) {
   return new Intl.DateTimeFormat("pt-BR", {
@@ -25,6 +28,8 @@ function formatDate(value: string) {
 
 export function HistoryScreen() {
   const { height: windowHeight } = useWindowDimensions();
+  const navigation = useNavigation<any>();
+  const { importItems } = useShopping();
   const [history, setHistory] = useState<ShoppingHistoryEntry[]>([]);
   const [selectedEntry, setSelectedEntry] =
     useState<ShoppingHistoryEntry | null>(null);
@@ -39,6 +44,11 @@ export function HistoryScreen() {
       loadHistory();
     }, []),
   );
+
+  const handleImport = useCallback((entry: ShoppingHistoryEntry) => {
+    importItems(entry.items);
+    navigation.navigate("Lista");
+  }, [importItems, navigation]);
 
   if (history.length === 0) {
     return (
@@ -80,10 +90,21 @@ export function HistoryScreen() {
               </Text>
             </View>
 
-            <View className="mt-3 flex-row justify-between">
-              <Text className="text-gray-300 text-sm">
-                {entry.itemCount} item(ns)
-              </Text>
+            <View className="mt-3 flex-row justify-between items-center">
+              <View className="flex-row items-center gap-3">
+                <View className="flex-row items-center gap-1">
+                  <ShoppingCart size={16} color={String(colors.gray[400])} />
+                  <Text className="text-gray-400 text-sm">{entry.itemCount}</Text>
+                </View>
+                <Pressable
+                  onPress={() => handleImport(entry)}
+                  hitSlop={8}
+                  className="flex-row items-center gap-1"
+                >
+                  <ArrowClockwise size={16} color={String(colors.gray[300])} />
+                  <Text className="text-gray-300 text-sm">Importar</Text>
+                </Pressable>
+              </View>
               <Text className="text-gray-300 text-sm">Ver itens</Text>
             </View>
           </Pressable>
@@ -129,6 +150,20 @@ export function HistoryScreen() {
               </View>
             ))}
           </ScrollView>
+
+          <Pressable
+            onPress={() => {
+              if (selectedEntry) {
+                handleImport(selectedEntry);
+                setSelectedEntry(null);
+              }
+            }}
+            className="flex-row items-center justify-center gap-2 mt-3 py-3 rounded-md bg-blue-500/20 border border-blue-500/30"
+          >
+            <ShoppingCart size={18} color={String(colors.blue[300])} />
+            <ArrowClockwise size={18} color={String(colors.blue[300])} />
+            <Text className="text-blue-300 font-semibold text-sm">Importar lista</Text>
+          </Pressable>
         </DialogContent>
       </Dialog>
     </SafeAreaView>
