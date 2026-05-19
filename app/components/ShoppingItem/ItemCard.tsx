@@ -1,5 +1,10 @@
 import React from "react";
-import { View, Text, TextInput, TouchableOpacity, LayoutChangeEvent } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  LayoutChangeEvent,
+} from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   Extrapolation,
@@ -11,6 +16,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { CaretUpIcon, CaretDownIcon, TrashIcon } from "phosphor-react-native";
 import { ShoppingItem as ShoppingItemType } from "../../types/shopping";
+import { Input } from "../lib/Input";
 
 interface ItemCardProps {
   item: ShoppingItemType;
@@ -52,12 +58,18 @@ export const ItemCard: React.FC<ItemCardProps> = ({
         return;
       }
 
-      const nextX = Math.min(0, Math.max(-DELETE_ACTION_WIDTH, event.translationX));
+      const nextX = Math.min(
+        0,
+        Math.max(-DELETE_ACTION_WIDTH, event.translationX),
+      );
       translateX.value = nextX;
     })
     .onEnd(() => {
       if (translateX.value <= -SWIPE_DELETE_THRESHOLD) {
-        translateX.value = withSpring(-cardWidth.value, { damping: 20, stiffness: 220 });
+        translateX.value = withSpring(-cardWidth.value, {
+          damping: 20,
+          stiffness: 220,
+        });
         runOnJS(removeItem)();
         return;
       }
@@ -70,7 +82,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({
       Math.abs(translateX.value),
       [0, DELETE_ACTION_WIDTH],
       [0, 1],
-      Extrapolation.CLAMP
+      Extrapolation.CLAMP,
     );
 
     return {
@@ -95,7 +107,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({
       <GestureDetector gesture={panGesture}>
         <Animated.View
           style={cardStyle}
-          className="bg-gray-900 rounded-2xl p-2 flex-row items-center gap-2.5 border border-gray-800 shadow-black/30 shadow-lg max-h-28"
+          className="bg-gray-900 rounded-2xl p-2 flex-row items-center gap-1 border border-gray-800 shadow-black/30 shadow-lg max-h-28"
         >
           <Text
             numberOfLines={1}
@@ -127,16 +139,14 @@ export const ItemCard: React.FC<ItemCardProps> = ({
             </TouchableOpacity>
           </View>
 
-          <View className="rounded-2xl max-w-24 w-full bg-gray-600 h-full justify-center items-center border">
-            <TextInput
-              className="text-white px-4 text-center"
-              value={item.price > 0 ? item.price.toString() : ""}
-              onChangeText={(text) => onUpdatePrice(parseFloat(text) || 0)}
-              keyboardType="numeric"
-              placeholder="0,00"
-              placeholderTextColor="rgba(255,255,255,0.3)"
-            />
-          </View>
+          <Input
+            className="max-w-24 w-full bg-gray-600 border-gray-500 text-center px-4"
+            value={item.price > 0 ? item.price.toString() : ""}
+            onChangeText={(text) => onUpdatePrice(parseFloat(text) || 0)}
+            keyboardType="numeric"
+            placeholder="0,00"
+            placeholderTextColor="rgba(255,255,255,0.3)"
+          />
         </Animated.View>
       </GestureDetector>
     </View>

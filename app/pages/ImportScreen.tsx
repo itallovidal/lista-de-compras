@@ -1,49 +1,67 @@
-import React, { useMemo, useState } from 'react';
-import { View, Text, TouchableOpacity, Alert } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useShopping } from '../hooks/useShopping';
-import { TextArea } from '../components/ui/TextArea';
-import { hasValidMultilineFormat, parseImportedItems } from '../lib/importItems';
+import React, { useMemo, useState } from "react";
+import { View, Text, TouchableOpacity, Alert } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useShopping } from "../hooks/useShopping";
+import { TextArea } from "../components/lib/TextArea";
+import { Dialog } from "../components/lib/Dialog";
+import { Tooltip } from "../components/lib/Tooltip";
+import {
+  hasValidMultilineFormat,
+  parseImportedItems,
+} from "../lib/importItems";
 
 export const ImportScreen: React.FC = () => {
   const { addItems } = useShopping();
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState("");
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   const items = useMemo(() => parseImportedItems(value), [value]);
 
-  const hasInvalidFormat = value.trim().length > 0 && !hasValidMultilineFormat(value);
+  const hasInvalidFormat =
+    value.trim().length > 0 && !hasValidMultilineFormat(value);
 
   const handleImport = () => {
     if (!hasValidMultilineFormat(value)) {
-      Alert.alert('Formato inválido', 'Cole a lista com um item por linha.');
+      Alert.alert("Formato inválido", "Cole a lista com um item por linha.");
       return;
     }
 
+    setConfirmOpen(true);
+  };
+
+  const confirmImport = () => {
     addItems(items);
-    setValue('');
-    Alert.alert('Importado', `${items.length} item(ns) importado(s).`);
+    setValue("");
+    setConfirmOpen(false);
+    Alert.alert("Importado", `${items.length} item(ns) importado(s).`);
   };
 
   return (
     <SafeAreaView className="flex-1 bg-gray-900 px-4 py-4">
       <View className="flex-1 gap-4">
-        <View className="rounded-3xl bg-gray-800 p-5 border border-gray-700">
+        <View className="rounded-3xl bg-gray-900 p-5 border border-gray-800">
           <Text className="text-white text-2xl font-bold">Importar lista</Text>
           <Text className="text-gray-300 mt-2 leading-5">
-            Cole sua lista com um item por linha. O app vai separar cada linha e importar em lote.
+            Cole sua lista com um item por linha. O app vai separar cada linha e
+            importar em lote.
           </Text>
         </View>
 
-        <View className="rounded-3xl bg-gray-800 p-5 border border-gray-700 flex-1 gap-4">
+        <View className="rounded-3xl bg-gray-900 p-5 flex-1 gap-4">
+          <Tooltip content="Cole uma linha por item. Exemplo: leite\npao\narroz">
+            <Text className="text-blue-300 font-semibold">Como formatar?</Text>
+          </Tooltip>
+
           <TextArea
             value={value}
             onChangeText={setValue}
-            placeholder={'item\nitem\nitem\nitem'}
+            placeholder={"item\nitem\nitem\nitem"}
             placeholderTextColor="rgba(255,255,255,0.35)"
           />
 
-          <Text className={hasInvalidFormat ? 'text-red-400' : 'text-gray-400'}>
-            Formato obrigatório: uma linha por item, com quebra de linha entre eles.
+          <Text className={hasInvalidFormat ? "text-red-400" : "text-gray-400"}>
+            Formato obrigatório: uma linha por item, com quebra de linha entre
+            eles.
           </Text>
 
           <View className="flex-row items-center justify-between">
@@ -60,6 +78,16 @@ export const ImportScreen: React.FC = () => {
           </View>
         </View>
       </View>
+
+      <Dialog
+        open={confirmOpen}
+        title="Confirmar importação"
+        description={`Importar ${items.length} item(ns) da lista colada?`}
+        confirmLabel="Importar"
+        cancelLabel="Cancelar"
+        onConfirm={confirmImport}
+        onCancel={() => setConfirmOpen(false)}
+      />
     </SafeAreaView>
   );
 };
