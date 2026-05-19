@@ -7,6 +7,7 @@ import { useShopping } from "../hooks/useShopping";
 // Project convention: prefer named functions in app/pages and app/components.
 export function HomeScreen() {
   const { list, addItem, updateItem, removeItem, saveCurrentList, clearCurrentList, getTotal } = useShopping();
+  const totalQuantity = list.items.reduce((sum, item) => sum + (item.quantity || 1), 0);
 
   return (
     <SafeAreaView className="flex-1 bg-gray-900">
@@ -14,6 +15,7 @@ export function HomeScreen() {
       <Header
         total={getTotal()}
         itemCount={list.items.length}
+        totalQuantity={totalQuantity}
         onAddItem={addItem}
         onSave={saveCurrentList}
         onClear={clearCurrentList}

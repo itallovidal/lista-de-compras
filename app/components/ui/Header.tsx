@@ -17,6 +17,7 @@ import { FloppyDiskBackIcon } from "phosphor-react-native";
 interface HeaderProps {
   total: number;
   itemCount: number;
+  totalQuantity: number;
   onAddItem: (name: string) => void;
   onSave: (marketName: string) => Promise<void>;
   onClear: () => void;
@@ -25,6 +26,7 @@ interface HeaderProps {
 export function Header({
   total,
   itemCount,
+  totalQuantity,
   onAddItem,
   onSave,
   onClear,
@@ -92,16 +94,25 @@ export function Header({
             </View>
           </View>
 
-          <Text className="text-white/85 mt-1 font-medium">
-            {itemCount} item(ns) na lista
-          </Text>
+          <View className="mt-3 flex-row items-center gap-2 flex-wrap">
+            <View className="rounded-full bg-white/15 border border-white/20 px-3 py-1">
+              <Text className="text-white text-sm font-semibold">
+                {itemCount} produtos distintos
+              </Text>
+            </View>
+            <View className="rounded-full bg-white/15 border border-white/20 px-3 py-1">
+              <Text className="text-white text-sm font-semibold">
+                {totalQuantity} itens totais
+              </Text>
+            </View>
+          </View>
         </View>
 
         <View className="h-3" />
 
         <View className="flex-row items-center gap-2.5 h-12">
           <Input
-            className="flex-1 "
+            className="flex-1 border-white/35 bg-white/20 text-white h-full"
             value={inputValue}
             onChangeText={setInputValue}
             placeholder="Nome do item..."
@@ -137,7 +148,7 @@ export function Header({
             />
             <View className="rounded-2xl border border-gray-700 bg-gray-800 px-4 py-3 gap-1">
               <Text className="text-white font-semibold">
-                {itemCount} item(ns) • {formatCurrency(total)}
+                {itemCount} produtos distintos • {totalQuantity} itens totais • {formatCurrency(total)}
               </Text>
               <Text className="text-gray-300 text-sm">
                 Essa lista pode ser salva no histórico ou apenas limpa da tela.
