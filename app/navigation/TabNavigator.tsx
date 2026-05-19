@@ -4,20 +4,29 @@ import { Text, View } from "react-native";
 import { HomeScreen } from "../pages/HomeScreen";
 import { ImportScreen } from "../pages/ImportScreen";
 import { HistoryScreen } from "../pages/HistoryScreen";
+import colors from "tailwindcss/colors";
+import {
+  ShoppingCartIcon,
+  DownloadSimpleIcon,
+  ClockClockwiseIcon,
+} from "phosphor-react-native";
 
 const Tab = createBottomTabNavigator();
 
 const TabIcon = ({ name, focused }: { name: string; focused: boolean }) => {
-  const icons: Record<string, string> = {
-    Lista: "🛒",
-    Importar: "📥",
-    Histórico: "📜",
+  const icons: Record<string, any> = {
+    Lista: ShoppingCartIcon,
+    Importar: DownloadSimpleIcon,
+    Histórico: ClockClockwiseIcon,
   };
+  const Icon = icons[name] || ShoppingCartIcon;
   return (
-    <View
-      className={`items-center px-3 py-1 rounded-lg ${focused ? "bg-blue-600/20" : ""}`}
-    >
-      <Text className="text-xl">{icons[name] || "📄"}</Text>
+    <View className={`items-center`}>
+      <Icon
+        size={24}
+        color={focused ? String(colors.white) : String(colors.gray[500])}
+        weight={focused ? "fill" : "regular"}
+      />
     </View>
   );
 };
@@ -29,12 +38,12 @@ export const TabNavigator: React.FC = () => {
         tabBarIcon: ({ focused }) => (
           <TabIcon name={route.name} focused={focused} />
         ),
-        tabBarActiveTintColor: "#379DF1",
-        tabBarInactiveTintColor: "#8D8D99",
+        tabBarActiveTintColor: colors.white,
+        tabBarInactiveTintColor: colors.gray[500],
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: "#202024",
-          borderTopColor: "#323238",
+          backgroundColor: colors.gray[900],
+          borderTopColor: colors.gray[800],
           borderTopWidth: 1,
           paddingBottom: 24,
           height: 82,

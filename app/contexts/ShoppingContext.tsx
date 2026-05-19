@@ -5,6 +5,7 @@ import { saveShoppingList, loadShoppingList } from '../lib/storage';
 interface ShoppingContextType {
   list: ShoppingList;
   addItem: (name: string) => void;
+  addItems: (names: string[]) => void;
   updateItem: (id: string, updates: Partial<ShoppingItem>) => void;
   removeItem: (id: string) => void;
   getTotal: () => number;
@@ -60,6 +61,29 @@ export const ShoppingProvider: React.FC<ShoppingProviderProps> = ({ children }) 
     });
   }, [calculateTotal]);
 
+  const addItems = useCallback((names: string[]) => {
+    const cleanedNames = names.map((name) => name.trim()).filter(Boolean);
+    if (cleanedNames.length === 0) return;
+
+    setList((prev) => {
+      const newItems: ShoppingItem[] = [
+        ...prev.items,
+        ...cleanedNames.map((name) => ({
+          id: Date.now().toString() + Math.random().toString(36).slice(2),
+          name,
+          price: 0,
+          quantity: 1,
+        })),
+      ];
+      const newList = {
+        items: newItems,
+        total: calculateTotal(newItems),
+      };
+      saveShoppingList(newList);
+      return newList;
+    });
+  }, [calculateTotal]);
+
   const updateItem = useCallback((id: string, updates: Partial<ShoppingItem>) => {
     setList((prev) => {
       const newItems = prev.items.map((item) =>
@@ -90,7 +114,7 @@ export const ShoppingProvider: React.FC<ShoppingProviderProps> = ({ children }) 
 
   return (
     <ShoppingContext.Provider
-      value={{ list, addItem, updateItem, removeItem, getTotal }}
+      value={{ list, addItem, addItems, updateItem, removeItem, getTotal }}
     >
       {children}
     </ShoppingContext.Provider>

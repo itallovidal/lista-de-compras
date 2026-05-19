@@ -17,21 +17,14 @@ export const ShoppingList: React.FC<ShoppingListProps> = ({
 }) => {
   if (items.length === 0) {
     return (
-      <View className="flex-1 justify-center items-center px-4 bg-gray-900">
-        <LinearGradient
-          colors={["#1e2a4a", "#1e1e3a"]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          className="rounded-3xl p-10 items-center w-full border border-[#6366f1]/30"
-        >
+      <View className="flex-1 justify-center items-center px-4 bg-gray-900 overflow-hidden">
+        <View className="rounded-3xl p-10 items-center w-full border border-gray-800 overflow-hidden">
           <Text className="text-6xl mb-4">🛒</Text>
-          <Text className="text-white text-xl font-bold mb-2">
-            Lista vazia
-          </Text>
-          <Text className="text-white/50 text-sm text-center leading-5">
+          <Text className="text-white text-xl font-bold mb-2">Lista vazia</Text>
+          <Text className="text-white text-sm text-center leading-5">
             Adicione o primeiro item usando o campo acima e comece sua lista!
           </Text>
-        </LinearGradient>
+        </View>
       </View>
     );
   }

@@ -19,9 +19,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({
   const isMinQty = item.quantity <= 1;
 
   return (
-    <View
-      className="bg-[#1f2937] rounded-2xl p-3.5 mb-2.5 flex-row items-center gap-2.5 border border-white/6 shadow-black/30 shadow-lg max-h-28"
-    >
+    <View className="bg-gray-900 rounded-2xl p-2 mb-2.5 flex-row items-center gap-2.5 border border-gray-800 shadow-black/30 shadow-lg max-h-28">
       <Text
         numberOfLines={1}
         ellipsizeMode="tail"
@@ -30,7 +28,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({
         {item.name}
       </Text>
 
-      <View className="p-4 h-full flex-row justify-center items-center border rounded-2xl bg-gray-600">
+      <View className="p-1 h-full flex-row justify-center items-center border rounded-2xl bg-gray-600">
         <TouchableOpacity
           onPress={() => onUpdateQuantity(item.quantity + 1)}
           activeOpacity={0.7}
@@ -39,9 +37,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({
           <CaretUpIcon size={14} color="white" weight="regular" />
         </TouchableOpacity>
 
-        <Text
-          className="text-white text-sm font-bold min-w-5 text-center"
-        >
+        <Text className="text-white text-sm font-bold min-w-5 text-center">
           {item.quantity}
         </Text>
 
@@ -54,9 +50,9 @@ export const ItemCard: React.FC<ItemCardProps> = ({
         </TouchableOpacity>
       </View>
 
-      <View className="rounded-2xl bg-gray-600 p-4 h-full justify-center items-center border">
+      <View className="rounded-2xl  max-w-24 w-full bg-gray-600 h-full justify-center items-center border">
         <TextInput
-          className="text-white text-[13px] text-center"
+          className="text-white px-4 text-center"
           value={item.price > 0 ? item.price.toString() : ""}
           onChangeText={(text) => onUpdatePrice(parseFloat(text) || 0)}
           keyboardType="numeric"
