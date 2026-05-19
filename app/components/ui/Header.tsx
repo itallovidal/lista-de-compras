@@ -12,7 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../lib/Dialog";
-import { ArrowArcLeftIcon, FloppyDiskBackIcon } from "phosphor-react-native";
+import { CheckFatIcon, SealQuestionIcon } from "phosphor-react-native";
 import { Separator } from "../lib/separator";
 import { ArrowLeftIcon } from "lucide-react-native";
 import {
@@ -153,39 +153,17 @@ export function Header({
             </View>
 
             <View className="flex-row items-center gap-2">
-              <TouchableOpacity
-                onPress={openFinalizeDialog}
-                activeOpacity={0.85}
-                className="w-12 h-12 bg-white/20 rounded-md justify-center items-center border border-white/35"
-              >
-                <FloppyDiskBackIcon size={20} color="white" weight="fill" />
-              </TouchableOpacity>
               <Tooltip content="Você pode arrastar itens para apagar e importar listas completas pela aba de importação.">
                 <TouchableOpacity
                   activeOpacity={0.85}
-                  className="w-12 h-12 bg-white/20 rounded-md justify-center items-center border border-white/35"
+                  className="w-12 h-12 bg-white/20 rounded-full justify-center items-center border border-white/35"
                 >
-                  <Text className="text-white text-md font-bold">i</Text>
+                  <SealQuestionIcon size={20} color="white" weight="fill" />
                 </TouchableOpacity>
               </Tooltip>
             </View>
           </View>
-
-          <View className="mt-3 flex-row items-center gap-2 flex-wrap">
-            <View className="rounded-full bg-white/15 border border-white/20 px-3 py-1">
-              <Text className="text-white text-sm font-semibold">
-                {itemCount} produtos distintos
-              </Text>
-            </View>
-            <View className="rounded-full bg-white/15 border border-white/20 px-3 py-1">
-              <Text className="text-white text-sm font-semibold">
-                {totalQuantity} itens totais
-              </Text>
-            </View>
-          </View>
         </View>
-
-        <View className="h-3" />
 
         <View className="flex-row items-center gap-2.5 h-12">
           <Input
@@ -203,6 +181,30 @@ export function Header({
             className="w-12 h-full bg-white/20 rounded-md justify-center items-center border border-white/35"
           >
             <Text className="text-white text-3xl font-light leading-8">+</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View className="mt-3 flex-row items-center justify-between gap-2 ">
+          <View className="flex-row gap-2">
+            <View className="rounded-full bg-white/15 border border-white/20 px-3 py-1">
+              <Text className="text-white text-sm font-semibold">
+                {itemCount} Produtos
+              </Text>
+            </View>
+            <View className="rounded-full bg-white/15 border border-white/20 px-3 py-1">
+              <Text className="text-white text-sm font-semibold">
+                {totalQuantity} itens
+              </Text>
+            </View>
+          </View>
+
+          <TouchableOpacity
+            onPress={openFinalizeDialog}
+            activeOpacity={0.85}
+            className=" h-12 bg-white/20 flex-row gap-2 px-2 rounded-md justify-center items-center border border-white/35"
+          >
+            <CheckFatIcon size={20} color="white" weight="fill" />
+            <Text className="text-white text-md font-bold">Finalizar</Text>
           </TouchableOpacity>
         </View>
       </LinearGradient>
