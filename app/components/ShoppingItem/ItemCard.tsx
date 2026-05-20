@@ -15,6 +15,8 @@ import Animated, {
 import { CaretUpIcon, CaretDownIcon, TrashIcon } from "phosphor-react-native";
 import { ShoppingItem as ShoppingItemType } from "../../types/shopping";
 import { Input } from "../lib/Input";
+import { parsePriceInput } from "../../lib/parsePriceInput";
+import { formatPriceInput } from "../../lib/formatPriceInput";
 
 interface ItemCardProps {
   item: ShoppingItemType;
@@ -59,7 +61,7 @@ export function ItemCard({
   }
 
   function handlePriceChange(text: string) {
-    onUpdatePrice(parseFloat(text) || 0);
+    onUpdatePrice(parsePriceInput(text));
   }
 
   const panGesture = Gesture.Pan()
@@ -147,9 +149,9 @@ export function ItemCard({
 
           <Input
             className="max-w-24 w-full bg-gray-800/80 border-gray-800/70 rounded-lg text-center px-4"
-            value={item.price > 0 ? item.price.toString() : ""}
+            value={formatPriceInput(item.price)}
             onChangeText={handlePriceChange}
-            keyboardType="numeric"
+            keyboardType="decimal-pad"
             placeholder="0,00"
             placeholderTextColor="rgba(255,255,255,0.3)"
           />
