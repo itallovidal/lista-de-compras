@@ -49,15 +49,16 @@ export const TabNavigator: React.FC = () => {
           backgroundColor: colors.gray[900],
           borderTopColor: colors.gray[800],
           borderTopWidth: 1,
-          paddingBottom: Math.max(insets.bottom, 12),
-          height: 58 + Math.max(insets.bottom, 12),
+          paddingBottom: 32,
+          height: 54 + Math.max(insets.bottom, 18),
+          // height: 58 + Math.max(insets.bottom, 18),
         },
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: "600",
         },
         tabBarItemStyle: {
-          paddingVertical: 4,
+          paddingVertical: 2,
         },
       })}
     >
