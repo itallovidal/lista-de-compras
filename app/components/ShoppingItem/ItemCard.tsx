@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { View, Text, TouchableOpacity, LayoutChangeEvent } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
@@ -27,6 +27,7 @@ interface ItemCardProps {
 
 const DELETE_ACTION_WIDTH = 92;
 const SWIPE_DELETE_THRESHOLD = 80;
+const FORMAT_DEBOUNCE_MS = 3000;
 
 export function ItemCard({
   item,
@@ -37,6 +38,30 @@ export function ItemCard({
   const isMinQty = item.quantity <= 1;
   const translateX = useSharedValue(0);
   const cardWidth = useSharedValue(0);
+
+  const [displayValue, setDisplayValue] = useState(formatPriceInput(item.price));
+  const formatTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearFormatTimer = useCallback(() => {
+    if (formatTimerRef.current !== null) {
+      clearTimeout(formatTimerRef.current);
+      formatTimerRef.current = null;
+    }
+  }, []);
+
+  useEffect(() => {
+    return clearFormatTimer;
+  }, [clearFormatTimer]);
+
+  const scheduleFormat = useCallback(
+    (value: number) => {
+      clearFormatTimer();
+      formatTimerRef.current = setTimeout(() => {
+        setDisplayValue(formatPriceInput(value));
+      }, FORMAT_DEBOUNCE_MS);
+    },
+    [clearFormatTimer],
+  );
 
   function handleLayout(event: LayoutChangeEvent) {
     cardWidth.value = event.nativeEvent.layout.width;
@@ -61,8 +86,32 @@ export function ItemCard({
   }
 
   function handlePriceChange(text: string) {
-    onUpdatePrice(parsePriceInput(text));
+    setDisplayValue(text);
+    const parsed = parsePriceInput(text);
+    onUpdatePrice(parsed);
+    scheduleFormat(parsed);
   }
+
+  function handleFocus() {
+    clearFormatTimer();
+    setDisplayValue(item.price > 0 ? String(item.price).replace(".", ",") : "");
+  }
+
+  function handleBlur() {
+    clearFormatTimer();
+    setDisplayValue(formatPriceInput(item.price));
+  }
+
+  const prevPriceRef = useRef(item.price);
+
+  useEffect(() => {
+    if (prevPriceRef.current !== item.price) {
+      prevPriceRef.current = item.price;
+      if (!displayValue) {
+        setDisplayValue(formatPriceInput(item.price));
+      }
+    }
+  }, [item.price, displayValue]);
 
   const panGesture = Gesture.Pan()
     .activeOffsetX([-8, 8])
@@ -149,8 +198,10 @@ export function ItemCard({
 
           <Input
             className="max-w-24 w-full bg-gray-800/80 border-gray-800/70 rounded-lg text-center px-4"
-            value={formatPriceInput(item.price)}
+            value={displayValue}
             onChangeText={handlePriceChange}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
             keyboardType="decimal-pad"
             placeholder="0,00"
             placeholderTextColor="rgba(255,255,255,0.3)"
